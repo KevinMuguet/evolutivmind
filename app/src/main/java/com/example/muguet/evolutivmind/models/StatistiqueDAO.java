@@ -1,5 +1,6 @@
+package com.example.muguet.evolutivmind.models;
+
 import androidx.room.*;
-import com.example.muguet.evolutivmind.models.Statistique;
 
 import java.util.List;
 
@@ -10,10 +11,11 @@ public interface StatistiqueDAO {
     void insert(Statistique statistique);
 
     @Update
-    void update(Statistique... Statistique);
+    void update(Statistique... statistique);
 
     @Delete
     void delete(Statistique... statistiques);
+
     @Query("SELECT * FROM statistique")
     List<Statistique> getAllStatistique();
 
