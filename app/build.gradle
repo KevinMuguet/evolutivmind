@@ -6,6 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.muguet.evolutivmind"
         minSdkVersion 19
         targetSdkVersion 28
@@ -18,6 +19,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    aaptOptions{
+        cruncherEnabled = false
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -38,6 +45,7 @@ dependencies {
     def room_version = "2.1.0-alpha03"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    implementation "com.android.support:multidex:1.0.3"
 }
 
 apply plugin: 'com.google.gms.google-services'

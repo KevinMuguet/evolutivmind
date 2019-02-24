@@ -1,23 +1,27 @@
 package com.example.muguet.evolutivmind.models;
 
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class Profil {
 
-    @PrimaryKey public final int id;
-    public final String nom;
-    public final int niveau;
-    public final int experience;
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+    public String nom;
+    public int niveau;
+    public int experience;
 
-    public Profil(final int id, String nom, int niveau,
-                       final int experience) {
-        this.id = id;
+    public void setNom(String nom){
         this.nom = nom;
+    }
+
+    public void setNiveau(int niveau){
         this.niveau = niveau;
+    }
+
+    public void setExperience(int experience){
         this.experience = experience;
     }
+
 }
