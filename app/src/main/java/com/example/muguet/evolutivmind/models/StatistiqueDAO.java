@@ -21,4 +21,10 @@ public interface StatistiqueDAO {
 
     @Query("SELECT * FROM statistique WHERE userId=:userId")
     List<Statistique> findStatistiqueForUser(final int userId);
+
+    @Query("SELECT * FROM statistique WHERE userId=:userId AND jeu=:jeu")
+    Statistique findStatistiqueJeuForUser(final int userId, final String jeu);
+
+    @Query("SELECT count(*) FROM statistique WHERE userId=:userId AND jeu=:jeu")
+    int countStatistique(final int userId, final String jeu);
 }

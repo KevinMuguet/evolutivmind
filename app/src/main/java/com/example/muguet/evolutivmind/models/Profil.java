@@ -12,6 +12,10 @@ public class Profil {
     public int niveau;
     public int experience;
 
+    public int getId() {
+        return id;
+    }
+
     public void setNom(String nom){
         this.nom = nom;
     }

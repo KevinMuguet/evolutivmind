@@ -9,7 +9,13 @@ import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.room.Room;
 import com.example.muguet.evolutivmind.R;
+import com.example.muguet.evolutivmind.models.AppDatabase;
+import com.example.muguet.evolutivmind.models.Session;
+import com.example.muguet.evolutivmind.models.Statistique;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,16 +24,20 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int nb_victoire = 0;
+    private int nb_defaite = 0;
     private List<String> list;
     private HashMap<String, Integer> listColor = new HashMap<>();
     private int correct_color;
     private int color2;
     private int color3;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        session = new Session(getApplicationContext());
 
         TextView mot = (TextView) findViewById(R.id.mot);
         ImageView img = (ImageView)findViewById(R.id.rectangle);
@@ -49,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
         (img).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "YES", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Correct", Toast.LENGTH_LONG).show();
+                nb_victoire = nb_victoire+1;
+                Log.d("victoires: ",""+nb_victoire);
                 changeGame();
             }
         });
@@ -57,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
         (img2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "YES", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
+                nb_defaite = nb_defaite+1;
+                Log.d("defaites: ",""+nb_defaite);
                 changeGame();
             }
         });
@@ -65,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
         (img3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "YES", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
+                nb_defaite = nb_defaite+1;
+                Log.d("defaites: ",""+nb_defaite);
                 changeGame();
             }
         });
@@ -138,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
     private void newGame(){
 
         TextView mot = (TextView) findViewById(R.id.mot);
+        TextView question = (TextView) findViewById(R.id.question);
         ImageView img = (ImageView)findViewById(R.id.rectangle);
         ImageView img2 = (ImageView)findViewById(R.id.rectangle2);
         ImageView img3 = (ImageView)findViewById(R.id.rectangle3);
@@ -150,8 +167,9 @@ public class MainActivity extends AppCompatActivity {
         color2 = setRandomColor();
         color3 = setRandomColor();
 
+        question.setText("De quelle couleur le mot est-il écrit?");
         mot.setTextColor(correct_color);
-        mot.setText("Reset");
+        mot.setText(setRandomColorString());
 
         drawable.setColorFilter(correct_color, PorterDuff.Mode.SRC_ATOP);
         img.setBackground(drawable);
@@ -169,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
     private void newGame2(){
 
         TextView mot = (TextView) findViewById(R.id.mot);
+        TextView question = (TextView) findViewById(R.id.question);
         ImageView img = (ImageView)findViewById(R.id.rectangle);
         ImageView img2 = (ImageView)findViewById(R.id.rectangle2);
         ImageView img3 = (ImageView)findViewById(R.id.rectangle3);
@@ -182,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
         color2 = setRandomColor();
         color3 = setRandomColor();
 
+        question.setText("Quelle est la couleur représentée par le mot écrit?");
         mot.setTextColor(color2);
         mot.setText(rndColorString);
 
@@ -207,5 +227,31 @@ public class MainActivity extends AppCompatActivity {
         }else{
             newGame2();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        FirebaseApp.initializeApp(this);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
+
+        //S'il n'y pas de statistique pour ce joueur, on la crée
+        if(db_loc.statistiqueDao().countStatistique(session.getUserId(), "ColorWords") == 0) {
+            Statistique statistique_colorwords = new Statistique();
+            statistique_colorwords.setVictoires(nb_victoire);
+            statistique_colorwords.setDefaites(nb_defaite);
+            statistique_colorwords.setJeu("ColorWords");
+            statistique_colorwords.setUserId(session.getUserId());
+            db_loc.statistiqueDao().insert(statistique_colorwords);
+        }else{
+            //S'il y a déjà des statistiques pour ce joueur, on la modifie
+            Statistique statistique_joueur = db_loc.statistiqueDao().findStatistiqueJeuForUser(session.getUserId(), "ColorWords");
+            statistique_joueur.setVictoires(statistique_joueur.getVictoires()+nb_victoire);
+            statistique_joueur.setDefaites(statistique_joueur.getDefaites()+nb_defaite);
+            db_loc.statistiqueDao().update(statistique_joueur);
+        }
+        finish();
+        return;
     }
 }

@@ -21,6 +21,12 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" tools:layout_editor_absoluteY="466dp"
+                    tools:layout_editor_absoluteX="163dp" android:id="@+id/question"
+            />
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
