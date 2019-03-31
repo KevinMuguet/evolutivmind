@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -14,8 +15,6 @@ import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Session;
 import com.example.muguet.evolutivmind.models.Statistique;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,125 +38,174 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         session = new Session(getApplicationContext());
 
-        TextView mot = (TextView) findViewById(R.id.mot);
-        ImageView img = (ImageView)findViewById(R.id.rectangle);
-        ImageView img2 = (ImageView)findViewById(R.id.rectangle2);
-        ImageView img3 = (ImageView)findViewById(R.id.rectangle3);
+        ImageView rect = (ImageView)findViewById(R.id.rectangle);
+        ImageView rect2 = (ImageView)findViewById(R.id.rectangle2);
+        ImageView rect3 = (ImageView)findViewById(R.id.rectangle3);
 
         listColor.put("Bleu", Color.BLUE);
         listColor.put("Rouge", Color.RED);
         listColor.put("Noir", Color.BLACK);
+        listColor.put("Vert", Color.GREEN);
+        listColor.put("Jaune", Color.YELLOW);
+        listColor.put("Gris", Color.GRAY);
 
         list = new ArrayList<String>(listColor.keySet());
 
+        //Création d'un timer
+        final TextView timer = (TextView) findViewById(R.id.timer);
+        CountDownTimer ti = new CountDownTimer(5000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timer.setText("Temps restant: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                nb_defaite = nb_defaite+1;
+                changeGame();
+                this.cancel();
+                this.start();
+            }
+        };
+        ti.start();
+
         newGame();
-        verif(img, img2, img3);
+        verif(rect, rect2, rect3, ti);
 
     }
 
-    private void verif(final ImageView img, final ImageView img2, final ImageView img3){
-        (img).setOnClickListener(new View.OnClickListener() {
+    /**
+     * Fonction vérifiant le choix du joueur
+     * @param rect
+     * @param rect2
+     * @param rect3
+     */
+    private void verif(final ImageView rect, final ImageView rect2, final ImageView rect3, final CountDownTimer ti){
+
+        (rect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ti.cancel();
                 Toast.makeText(MainActivity.this, "Correct", Toast.LENGTH_LONG).show();
                 nb_victoire = nb_victoire+1;
                 Log.d("victoires: ",""+nb_victoire);
                 changeGame();
+                ti.start();
             }
         });
 
-        (img2).setOnClickListener(new View.OnClickListener() {
+        (rect2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ti.cancel();
                 Toast.makeText(MainActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 nb_defaite = nb_defaite+1;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
+                ti.start();
             }
         });
 
-        (img3).setOnClickListener(new View.OnClickListener() {
+        (rect3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ti.cancel();
                 Toast.makeText(MainActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 nb_defaite = nb_defaite+1;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
+                ti.start();
             }
         });
     }
 
+    /**
+     * Fonction retournant une couleur aléatoire
+     * @return
+     */
     private int setRandomColor(){
         Random rnd = new Random();
         return Color.argb(255, rnd.nextInt(256),rnd.nextInt(256),rnd.nextInt(256));
     }
 
+    /**
+     * Fonction retournant un string de couleur aléatoire
+     * @return
+     */
     private String setRandomColorString(){
         Random random = new Random();
         String randomColor = list.get(random.nextInt(list.size()));
         return randomColor;
     }
 
-    private void switchPosition(ImageView img,ImageView img2,ImageView img3){
+    /**
+     * Fonction changeant aléatoirement la position des trois rectangles
+     * @param rect
+     * @param rect2
+     * @param rect3
+     */
+    private void switchPosition(ImageView rect,ImageView rect2,ImageView rect3){
 
-        float posXimg = img.getX();
-        float posYimg = img.getY();
+        float posXimg = rect.getX();
+        float posYimg = rect.getY();
 
-        float posXimg2 = img2.getX();
-        float posYimg2 = img2.getY();
+        float posXimg2 = rect2.getX();
+        float posYimg2 = rect2.getY();
 
-        float posXimg3 = img3.getX();
-        float posYimg3 = img3.getY();
+        float posXimg3 = rect3.getX();
+        float posYimg3 = rect3.getY();
 
         int nb = new Random().nextInt(5);
 
         switch (nb){
             case 1:
-                img2.setX(posXimg3);
-                img2.setY(posYimg3);
-                img3.setX(posXimg2);
-                img3.setY(posYimg2);
+                rect2.setX(posXimg3);
+                rect2.setY(posYimg3);
+                rect3.setX(posXimg2);
+                rect3.setY(posYimg2);
                 break;
             case 2:
-                img2.setX(posXimg);
-                img2.setY(posYimg);
-                img3.setX(posXimg2);
-                img3.setY(posYimg2);
-                img.setX(posXimg3);
-                img.setY(posYimg3);
+                rect2.setX(posXimg);
+                rect2.setY(posYimg);
+                rect3.setX(posXimg2);
+                rect3.setY(posYimg2);
+                rect.setX(posXimg3);
+                rect.setY(posYimg3);
                 break;
             case 3:
-                img2.setX(posXimg);
-                img2.setY(posYimg);
-                img.setX(posXimg2);
-                img.setY(posYimg2);
+                rect2.setX(posXimg);
+                rect2.setY(posYimg);
+                rect.setX(posXimg2);
+                rect.setY(posYimg2);
                 break;
             case 4:
-                img3.setX(posXimg);
-                img3.setY(posYimg);
-                img.setX(posXimg2);
-                img.setY(posYimg2);
-                img2.setX(posXimg3);
-                img2.setY(posYimg3);
+                rect3.setX(posXimg);
+                rect3.setY(posYimg);
+                rect.setX(posXimg2);
+                rect.setY(posYimg2);
+                rect2.setX(posXimg3);
+                rect2.setY(posYimg3);
                 break;
             case 5:
-                img3.setX(posXimg);
-                img3.setY(posYimg);
-                img.setX(posXimg3);
-                img.setY(posYimg3);
+                rect3.setX(posXimg);
+                rect3.setY(posYimg);
+                rect.setX(posXimg3);
+                rect.setY(posYimg3);
                 break;
             case 0:
                 break;
         }
     }
 
+    /**
+     * Fonction démarrant la première variante du jeu (couleur mot)
+     */
     private void newGame(){
 
         TextView mot = (TextView) findViewById(R.id.mot);
         TextView question = (TextView) findViewById(R.id.question);
-        ImageView img = (ImageView)findViewById(R.id.rectangle);
-        ImageView img2 = (ImageView)findViewById(R.id.rectangle2);
-        ImageView img3 = (ImageView)findViewById(R.id.rectangle3);
+        ImageView rect = (ImageView)findViewById(R.id.rectangle);
+        ImageView rect2 = (ImageView)findViewById(R.id.rectangle2);
+        ImageView rect3 = (ImageView)findViewById(R.id.rectangle3);
         Resources res = getResources();
         Drawable drawable = res.getDrawable(R.drawable.rectangle);
         Drawable drawable2 = res.getDrawable(R.drawable.rectangle2);
@@ -172,25 +220,28 @@ public class MainActivity extends AppCompatActivity {
         mot.setText(setRandomColorString());
 
         drawable.setColorFilter(correct_color, PorterDuff.Mode.SRC_ATOP);
-        img.setBackground(drawable);
+        rect.setBackground(drawable);
 
         drawable2.setColorFilter(color2, PorterDuff.Mode.SRC_ATOP);
-        img2.setBackground(drawable2);
+        rect2.setBackground(drawable2);
 
         drawable3.setColorFilter(color3, PorterDuff.Mode.SRC_ATOP);
-        img3.setBackground(drawable3);
+        rect3.setBackground(drawable3);
 
-        switchPosition(img, img2, img3);
+        switchPosition(rect, rect2, rect3);
 
     }
 
+    /**
+     * Fonction démarrant la seconde variante du jeu (couleur représentée par mot)
+     */
     private void newGame2(){
 
         TextView mot = (TextView) findViewById(R.id.mot);
         TextView question = (TextView) findViewById(R.id.question);
-        ImageView img = (ImageView)findViewById(R.id.rectangle);
-        ImageView img2 = (ImageView)findViewById(R.id.rectangle2);
-        ImageView img3 = (ImageView)findViewById(R.id.rectangle3);
+        ImageView rect = (ImageView)findViewById(R.id.rectangle);
+        ImageView rect2 = (ImageView)findViewById(R.id.rectangle2);
+        ImageView rect3 = (ImageView)findViewById(R.id.rectangle3);
         Resources res = getResources();
         Drawable drawable = res.getDrawable(R.drawable.rectangle);
         Drawable drawable2 = res.getDrawable(R.drawable.rectangle2);
@@ -206,22 +257,24 @@ public class MainActivity extends AppCompatActivity {
         mot.setText(rndColorString);
 
         drawable.setColorFilter(correct_color, PorterDuff.Mode.SRC_ATOP);
-        img.setBackground(drawable);
+        rect.setBackground(drawable);
 
         drawable2.setColorFilter(color2, PorterDuff.Mode.SRC_ATOP);
-        img2.setBackground(drawable2);
+        rect2.setBackground(drawable2);
 
         drawable3.setColorFilter(color3, PorterDuff.Mode.SRC_ATOP);
-        img3.setBackground(drawable3);
+        rect3.setBackground(drawable3);
 
-        switchPosition(img, img2, img3);
+        switchPosition(rect, rect2, rect3);
 
     }
 
+    /**
+     * Fonction choisissant aléatoirement le jeu
+     */
     private void changeGame(){
         Random rnd = new Random();
         int game = rnd.nextInt(2);
-        Log.d("Couleur ", Integer.toString(game));
         if(game == 1){
             newGame();
         }else{
@@ -229,10 +282,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Fonction sauvegardant les victoires et défaites du joueur
+     */
     @Override
     public void onBackPressed() {
-        FirebaseApp.initializeApp(this);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
 
