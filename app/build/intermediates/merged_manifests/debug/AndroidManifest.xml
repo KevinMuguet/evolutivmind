@@ -18,7 +18,15 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/AppTheme" >
-        <activity android:name="com.example.muguet.evolutivmind.views.MainActivity" >
+        <activity
+            android:name="com.example.muguet.evolutivmind.views.GamesActivity"
+            android:label="@string/title_activity_games"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.example.muguet.evolutivmind.views.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,11 +37,6 @@
         <service
             android:name="androidx.room.MultiInstanceInvalidationService"
             android:exported="false" />
-
-        <provider
-            android:name="com.android.tools.ir.server.InstantRunContentProvider"
-            android:authorities="com.example.muguet.evolutivmind.com.android.tools.ir.server.InstantRunContentProvider"
-            android:multiprocess="true" />
     </application>
 
 </manifest>
