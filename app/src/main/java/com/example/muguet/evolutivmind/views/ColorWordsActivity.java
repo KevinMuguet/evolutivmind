@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class ColorWordsActivity extends AppCompatActivity {
 
     private int nb_victoire = 0;
     private int nb_defaite = 0;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_colorwords);
         session = new Session(getApplicationContext());
 
         ImageView rect = (ImageView)findViewById(R.id.rectangle);
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ti.cancel();
-                Toast.makeText(MainActivity.this, "Correct", Toast.LENGTH_LONG).show();
+                Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
                 nb_victoire = nb_victoire+1;
                 Log.d("victoires: ",""+nb_victoire);
                 changeGame();
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ti.cancel();
-                Toast.makeText(MainActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
+                Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 nb_defaite = nb_defaite+1;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ti.cancel();
-                Toast.makeText(MainActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
+                Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 nb_defaite = nb_defaite+1;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
