@@ -9,6 +9,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.muguet.evolutivmind"
         minSdkVersion 19
         targetSdkVersion 28
@@ -22,6 +23,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    aaptOptions{
+        cruncherEnabled = false
+    }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -34,10 +41,15 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
 
     implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'com.google.firebase:firebase-firestore:18.0.0'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     def room_version = "2.1.0-alpha03"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    implementation "com.android.support:multidex:1.0.3"
 }
+
+apply plugin: 'com.google.gms.google-services'
