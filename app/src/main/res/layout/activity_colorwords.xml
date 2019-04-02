@@ -13,8 +13,7 @@
             android:layout_height="50dp"
             android:background="@drawable/rectangle2"
             android:layout_marginTop="108dp"
-            app:layout_constraintTop_toBottomOf="@+id/mot" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="265dp"
+            app:layout_constraintTop_toBottomOf="@+id/mot"
             app:layout_constraintStart_toEndOf="@+id/rectangle" android:layout_marginStart="51dp"
             app:layout_constraintEnd_toStartOf="@+id/rectangle3" android:layout_marginEnd="52dp"/>
     <ImageView
@@ -53,7 +52,7 @@
             android:layout_marginTop="78dp"
             app:layout_constraintTop_toBottomOf="@+id/question" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="162dp" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="162dp"/>
+            android:layout_marginEnd="162dp" android:textAlignment="center"/>
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
@@ -63,4 +62,12 @@
             app:layout_constraintTop_toBottomOf="@+id/timer" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="176dp" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="176dp"/>
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reponse" android:layout_marginEnd="176dp" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="153dp" app:layout_constraintTop_toBottomOf="@+id/rectangle2"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="92dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="177dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
