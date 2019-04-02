@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "900201928885",
+    "firebase_url": "https://evolutivmind.firebaseio.com",
+    "project_id": "evolutivmind",
+    "storage_bucket": "evolutivmind.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900201928885:android:85d319f2d78fe95d",
+        "android_client_info": {
+          "package_name": "com.example.muguet.evolutivmind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900201928885-pq7n9kg5scgnr8fpgtj24aibdgcdj352.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.muguet.evolutivmind",
+            "certificate_hash": "ebb415c751cbdd51793f4ce24d261fd0633f7622"
+          }
+        },
+        {
+          "client_id": "900201928885-ghvpu1qnevui6p9c4q0gr416ffj833ng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBU14yftH8_4sJqC1Zlip17FtMu0RBWzWI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900201928885-ghvpu1qnevui6p9c4q0gr416ffj833ng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
