@@ -285,27 +285,27 @@ public class ColorWordsActivity extends AppCompatActivity {
     /**
      * Fonction sauvegardant les victoires et défaites du joueur
      */
-    @Override
-    public void onBackPressed() {
-        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
-
-        //S'il n'y pas de statistique pour ce joueur, on la crée
-        if(db_loc.statistiqueDao().countStatistique(session.getUserId(), "ColorWords") == 0) {
-            Statistique statistique_colorwords = new Statistique();
-            statistique_colorwords.setVictoires(nb_victoire);
-            statistique_colorwords.setDefaites(nb_defaite);
-            statistique_colorwords.setJeu("ColorWords");
-            statistique_colorwords.setUserId(session.getUserId());
-            db_loc.statistiqueDao().insert(statistique_colorwords);
-        }else{
-            //S'il y a déjà des statistiques pour ce joueur, on la modifie
-            Statistique statistique_joueur = db_loc.statistiqueDao().findStatistiqueJeuForUser(session.getUserId(), "ColorWords");
-            statistique_joueur.setVictoires(statistique_joueur.getVictoires()+nb_victoire);
-            statistique_joueur.setDefaites(statistique_joueur.getDefaites()+nb_defaite);
-            db_loc.statistiqueDao().update(statistique_joueur);
-        }
-        finish();
-        return;
-    }
+//    @Override
+//    public void onBackPressed() {
+//        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
+//                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
+//
+//        //S'il n'y pas de statistique pour ce joueur, on la crée
+//        if(db_loc.statistiqueDao().countStatistique(session.getUserId(), "ColorWords") == 0) {
+//            Statistique statistique_colorwords = new Statistique();
+//            statistique_colorwords.setVictoires(nb_victoire);
+//            statistique_colorwords.setDefaites(nb_defaite);
+//            statistique_colorwords.setJeu("ColorWords");
+//            statistique_colorwords.setUserId(session.getUserId());
+//            db_loc.statistiqueDao().insert(statistique_colorwords);
+//        }else{
+//            //S'il y a déjà des statistiques pour ce joueur, on la modifie
+//            Statistique statistique_joueur = db_loc.statistiqueDao().findStatistiqueJeuForUser(session.getUserId(), "ColorWords");
+//            statistique_joueur.setVictoires(statistique_joueur.getVictoires()+nb_victoire);
+//            statistique_joueur.setDefaites(statistique_joueur.getDefaites()+nb_defaite);
+//            db_loc.statistiqueDao().update(statistique_joueur);
+//        }
+//        finish();
+//        return;
+//    }
 }
