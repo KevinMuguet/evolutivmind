@@ -38,9 +38,9 @@ public class ColorWordsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_colorwords);
         session = new Session(getApplicationContext());
 
-        ImageView rect = (ImageView)findViewById(R.id.rectangle);
-        ImageView rect2 = (ImageView)findViewById(R.id.rectangle2);
-        ImageView rect3 = (ImageView)findViewById(R.id.rectangle3);
+        ImageView rect = findViewById(R.id.rectangle);
+        ImageView rect2 = findViewById(R.id.rectangle2);
+        ImageView rect3 = findViewById(R.id.rectangle3);
 
         listColor.put("Bleu", Color.BLUE);
         listColor.put("Rouge", Color.RED);
@@ -49,10 +49,10 @@ public class ColorWordsActivity extends AppCompatActivity {
         listColor.put("Jaune", Color.YELLOW);
         listColor.put("Gris", Color.GRAY);
 
-        list = new ArrayList<String>(listColor.keySet());
+        list = new ArrayList<>(listColor.keySet());
 
         //Création d'un timer
-        final TextView timer = (TextView) findViewById(R.id.timer);
+        final TextView timer = findViewById(R.id.timer);
         CountDownTimer ti = new CountDownTimer(5000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -60,10 +60,10 @@ public class ColorWordsActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                nb_defaite = nb_defaite+1;
-                changeGame();
-                this.cancel();
-                this.start();
+//                nb_defaite++;
+//                changeGame();
+//                this.cancel();
+//                this.start();
             }
         };
         ti.start();
@@ -86,7 +86,7 @@ public class ColorWordsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ti.cancel();
                 Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
-                nb_victoire = nb_victoire+1;
+                nb_victoire++;
                 Log.d("victoires: ",""+nb_victoire);
                 changeGame();
                 ti.start();
@@ -98,7 +98,7 @@ public class ColorWordsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ti.cancel();
                 Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
-                nb_defaite = nb_defaite+1;
+                nb_defaite++;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
                 ti.start();
@@ -110,7 +110,7 @@ public class ColorWordsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ti.cancel();
                 Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
-                nb_defaite = nb_defaite+1;
+                nb_defaite++;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
                 ti.start();
@@ -201,11 +201,12 @@ public class ColorWordsActivity extends AppCompatActivity {
      */
     private void newGame(){
 
-        TextView mot = (TextView) findViewById(R.id.mot);
-        TextView question = (TextView) findViewById(R.id.question);
-        ImageView rect = (ImageView)findViewById(R.id.rectangle);
-        ImageView rect2 = (ImageView)findViewById(R.id.rectangle2);
-        ImageView rect3 = (ImageView)findViewById(R.id.rectangle3);
+        TextView mot = findViewById(R.id.mot);
+        TextView question = findViewById(R.id.question);
+        TextView reponse = findViewById(R.id.reponse);
+        ImageView rect = findViewById(R.id.rectangle);
+        ImageView rect2 = findViewById(R.id.rectangle2);
+        ImageView rect3 = findViewById(R.id.rectangle3);
         Resources res = getResources();
         Drawable drawable = res.getDrawable(R.drawable.rectangle);
         Drawable drawable2 = res.getDrawable(R.drawable.rectangle2);
@@ -218,6 +219,8 @@ public class ColorWordsActivity extends AppCompatActivity {
         question.setText("De quelle couleur le mot est-il écrit?");
         mot.setTextColor(correct_color);
         mot.setText(setRandomColorString());
+
+        reponse.setText("");
 
         drawable.setColorFilter(correct_color, PorterDuff.Mode.SRC_ATOP);
         rect.setBackground(drawable);
@@ -237,11 +240,12 @@ public class ColorWordsActivity extends AppCompatActivity {
      */
     private void newGame2(){
 
-        TextView mot = (TextView) findViewById(R.id.mot);
-        TextView question = (TextView) findViewById(R.id.question);
-        ImageView rect = (ImageView)findViewById(R.id.rectangle);
-        ImageView rect2 = (ImageView)findViewById(R.id.rectangle2);
-        ImageView rect3 = (ImageView)findViewById(R.id.rectangle3);
+        TextView mot = findViewById(R.id.mot);
+        TextView question = findViewById(R.id.question);
+        TextView reponse = findViewById(R.id.reponse);
+        ImageView rect = findViewById(R.id.rectangle);
+        ImageView rect2 = findViewById(R.id.rectangle2);
+        ImageView rect3 = findViewById(R.id.rectangle3);
         Resources res = getResources();
         Drawable drawable = res.getDrawable(R.drawable.rectangle);
         Drawable drawable2 = res.getDrawable(R.drawable.rectangle2);
@@ -255,6 +259,8 @@ public class ColorWordsActivity extends AppCompatActivity {
         question.setText("Quelle est la couleur représentée par le mot écrit?");
         mot.setTextColor(color2);
         mot.setText(rndColorString);
+
+        reponse.setText("");
 
         drawable.setColorFilter(correct_color, PorterDuff.Mode.SRC_ATOP);
         rect.setBackground(drawable);
@@ -282,9 +288,9 @@ public class ColorWordsActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Fonction sauvegardant les victoires et défaites du joueur
-     */
+//    /**
+//     * Fonction sauvegardant les victoires et défaites du joueur
+//     */
 //    @Override
 //    public void onBackPressed() {
 //        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
