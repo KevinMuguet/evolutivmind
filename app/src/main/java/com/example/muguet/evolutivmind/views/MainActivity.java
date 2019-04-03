@@ -30,6 +30,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button b_options = findViewById(R.id.btnOption);
+        b_options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), OptionsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
