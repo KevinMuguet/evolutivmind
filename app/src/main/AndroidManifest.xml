@@ -9,28 +9,43 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity
-                android:name=".views.GamesActivity"
-                android:label="@string/title_activity_games"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:screenOrientation="portrait">
+        <activity android:name=".views.OptionsActivity"
+                  android:label="@string/title_activity_games"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-                android:name=".views.ColorWordsActivity"
-                android:label="@string/title_activity_games"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:screenOrientation="portrait">
+        <activity android:name=".views.LoginActivity"
+                  android:label="@string/title_activity_games"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-                android:name=".views.MainActivity"
-                android:label="@string/title_activity_main"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:screenOrientation="portrait">
+        <activity android:name=".views.HubActivity"
+                  android:label="@string/title_activity_games"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+                android:name=".views.GamesActivity"
+                android:label="@string/title_activity_games"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+                android:name=".views.ColorWordsActivity"
+                android:label="@string/title_activity_games"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+                android:name=".views.MainActivity"
+                android:label="@string/title_activity_main"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
