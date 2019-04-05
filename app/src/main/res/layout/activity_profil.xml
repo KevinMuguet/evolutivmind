@@ -12,7 +12,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            app:lottie_rawRes="@raw/check_orangew"
+            app:lottie_rawRes="@raw/check_orange"
             app:lottie_loop="true"
             app:lottie_autoPlay="true"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="205dp"
