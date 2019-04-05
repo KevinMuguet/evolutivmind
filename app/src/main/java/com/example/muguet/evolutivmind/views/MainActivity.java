@@ -39,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button b_profil = findViewById(R.id.btnProfil);
+        b_profil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), ProfilActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
