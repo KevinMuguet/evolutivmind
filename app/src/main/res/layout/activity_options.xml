@@ -7,6 +7,18 @@
         android:layout_height="match_parent"
         tools:context=".views.OptionsActivity"
         android:background="@android:color/holo_orange_dark">
+    <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            app:lottie_rawRes="@raw/settings"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="205dp"
+            android:layout_marginBottom="366dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="80dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="206dp"/>
 
     <Button
             android:text="Logout"

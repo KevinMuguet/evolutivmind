@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Bouton qui permet d'accéder aux paramètres de l'application
         Button b_options = findViewById(R.id.btnOption);
         b_options.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,12 +41,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Bouton qui permet d'accéder au profil
         Button b_profil = findViewById(R.id.btnProfil);
         b_profil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), ProfilActivity.class);
                 startActivity(intent);
+            }
+        });
+
+
+        // Bouton de déconnexion
+        Button b_quitter = findViewById(R.id.btnQuitter);
+        b_quitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                System.exit(0);
             }
         });
     }
