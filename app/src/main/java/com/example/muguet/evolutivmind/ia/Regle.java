@@ -8,8 +8,22 @@ public class Regle {
     private int varianteJeu;
     private boolean resPartiePrecedente; // Victoire ou Défaite du joueur sur la partie précédente afin de réguler au mieux
     private int poids; // Cet attribut permet de mesurer la pertinence de l'association action et situation
+
+    public String getAction() {
+        return action;
+    }
+
     private String action; // La conséquence de l'action faite par l'utilisateur
 
+    public Regle(int idJoueur, int idJeu, float timeRestant, int varianteJeu, boolean resPartiePrecedente, int poids, String action){
+        this.idJoueur = idJoueur;
+        this.idJeu = idJeu;
+        this.timeRestant = timeRestant;
+        this.varianteJeu = varianteJeu;
+        this.resPartiePrecedente = resPartiePrecedente;
+        this.poids = poids;
+        this.action = action;
+    }
     // Partie Enum
         // COLORWORDS
         public static String param1 = "Augmentation du temps consacré au timer";
@@ -24,4 +38,5 @@ public class Regle {
         public static String param9 = "Augmenter le nombre de réponse possible";
         public static String param10 = "Réduire le nombre de réponse possible";
         public static String param11 = "Rajouter l'option Aucune de celle présentées";
+
 }

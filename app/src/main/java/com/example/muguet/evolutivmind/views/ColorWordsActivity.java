@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.room.Room;
 import com.example.muguet.evolutivmind.R;
+import com.example.muguet.evolutivmind.ia.Regle;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Session;
 import com.example.muguet.evolutivmind.models.Statistique;
@@ -31,6 +32,13 @@ public class ColorWordsActivity extends AppCompatActivity {
     private int color2;
     private int color3;
     private Session session;
+    private int variante;
+    private boolean resPartiePrecedente;
+    private long timeleft;
+    private long maxtime = 5000;
+
+    private CountDownTimer new_ti;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,8 @@ public class ColorWordsActivity extends AppCompatActivity {
         ImageView rect = findViewById(R.id.rectangle);
         ImageView rect2 = findViewById(R.id.rectangle2);
         ImageView rect3 = findViewById(R.id.rectangle3);
+        //Création d'un timer
+        final TextView timer = findViewById(R.id.timer);
 
         listColor.put("Bleu", Color.BLUE);
         listColor.put("Rouge", Color.RED);
@@ -51,12 +61,11 @@ public class ColorWordsActivity extends AppCompatActivity {
 
         list = new ArrayList<>(listColor.keySet());
 
-        //Création d'un timer
-        final TextView timer = findViewById(R.id.timer);
-        CountDownTimer ti = new CountDownTimer(5000, 1000) {
+        new_ti = new CountDownTimer(maxtime, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("Temps restant: " + millisUntilFinished / 1000);
+                timeleft = millisUntilFinished;
             }
 
             public void onFinish() {
@@ -66,10 +75,10 @@ public class ColorWordsActivity extends AppCompatActivity {
 //                this.start();
             }
         };
-        ti.start();
+        new_ti.start();
 
         newGame();
-        verif(rect, rect2, rect3, ti);
+        verif(rect, rect2, rect3);
 
     }
 
@@ -79,41 +88,42 @@ public class ColorWordsActivity extends AppCompatActivity {
      * @param rect2
      * @param rect3
      */
-    private void verif(final ImageView rect, final ImageView rect2, final ImageView rect3, final CountDownTimer ti){
+    private void verif(final ImageView rect, final ImageView rect2, final ImageView rect3){
 
         (rect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ti.cancel();
+
+                resPartiePrecedente = true;
                 Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
                 nb_victoire++;
                 Log.d("victoires: ",""+nb_victoire);
                 changeGame();
-                ti.start();
+                changeTimer(true);
             }
         });
 
         (rect2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ti.cancel();
+                resPartiePrecedente = false;
                 Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 nb_defaite++;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
-                ti.start();
+                changeTimer(false);
             }
         });
 
         (rect3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ti.cancel();
+                resPartiePrecedente = false;
                 Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 nb_defaite++;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
-                ti.start();
+                changeTimer(false);
             }
         });
     }
@@ -201,6 +211,8 @@ public class ColorWordsActivity extends AppCompatActivity {
      */
     private void newGame(){
 
+        variante = 1;
+
         TextView mot = findViewById(R.id.mot);
         TextView question = findViewById(R.id.question);
         TextView reponse = findViewById(R.id.reponse);
@@ -239,6 +251,8 @@ public class ColorWordsActivity extends AppCompatActivity {
      * Fonction démarrant la seconde variante du jeu (couleur représentée par mot)
      */
     private void newGame2(){
+
+        variante = 2;
 
         TextView mot = findViewById(R.id.mot);
         TextView question = findViewById(R.id.question);
@@ -286,6 +300,50 @@ public class ColorWordsActivity extends AppCompatActivity {
         }else{
             newGame2();
         }
+    }
+
+    private void changeTimer(boolean increase){
+        //Création d'un timer
+        final TextView timer = findViewById(R.id.timer);
+
+        new_ti.cancel();
+        if(increase == true) {
+            maxtime += 1000;
+        }else{
+            maxtime = maxtime - 1000;
+        }
+
+        new_ti = new CountDownTimer(maxtime, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timer.setText("Temps restant: " + millisUntilFinished / 1000);
+                timeleft = millisUntilFinished;
+            }
+
+            public void onFinish() {
+            }
+        };
+        new_ti.start();
+    }
+
+    private void jouerRegle(Regle regle){
+
+        switch(regle.getAction()){
+            case "Augmentation du temps consacré au timer":
+                changeTimer(true);
+                break;
+            case "Diminution du temps consacré au timer":
+                changeTimer(false);
+            default:
+                break;
+        }
+    }
+
+    private void creerRegle(){
+        //Création d'un timer
+        final TextView timer = findViewById(R.id.timer);
+        Regle regle = new Regle(session.getUserId(), 1, Float.parseFloat(timer.getText().toString()), variante, resPartiePrecedente, 5, "");
+
     }
 
 //    /**
