@@ -30,7 +30,6 @@ public class Regle {
         public static String param2 = "Diminution du temps consacré au timer";
         public static String param3 = "Modification du mot et de la couleur avec laquelle il est écrit en cours de jeu";
         public static String param5 = "Réduire le temps d'exposition du mot";
-        public static String param6 = "Augmenter le temps d'exposition du mot";
 
         // MEMORIZE
         public static String param7 = "Réduire le temps d'exposition de l'image/forme";

@@ -19,4 +19,7 @@ public interface ProfilDAO {
     @Query("SELECT * FROM profil")
     List<Profil> getAllProfil();
 
+    @Query("SELECT * FROM profil WHERE nom=:username")
+    Profil getProfil(final String username);
+
 }

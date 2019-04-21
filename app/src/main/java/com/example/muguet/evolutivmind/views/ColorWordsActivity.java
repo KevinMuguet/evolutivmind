@@ -1,5 +1,8 @@
 package com.example.muguet.evolutivmind.views;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -8,6 +11,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.room.Room;
@@ -15,7 +19,6 @@ import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.ia.Regle;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Session;
-import com.example.muguet.evolutivmind.models.Statistique;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,17 +37,29 @@ public class ColorWordsActivity extends AppCompatActivity {
     private Session session;
     private int variante;
     private boolean resPartiePrecedente;
+    private boolean timerActif;
     private long timeleft;
     private long maxtime = 5000;
+    private long tempsexposition;
+    private int userId;
 
     private CountDownTimer new_ti;
+    private CountDownTimer timerExpo;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colorwords);
-        session = new Session(getApplicationContext());
+
+        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
+
+        SharedPreferences sharedpreferences = getSharedPreferences("MyPref",
+                Context.MODE_PRIVATE);
+        String loginFromSP = sharedpreferences.getString("login", null);
+
+        userId = db_loc.profilDao().getProfil(loginFromSP).getId();
 
         ImageView rect = findViewById(R.id.rectangle);
         ImageView rect2 = findViewById(R.id.rectangle2);
@@ -69,10 +84,9 @@ public class ColorWordsActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-//                nb_defaite++;
-//                changeGame();
-//                this.cancel();
-//                this.start();
+                nb_defaite++;
+                changeGame();
+                resetTimer();
             }
         };
         new_ti.start();
@@ -93,37 +107,48 @@ public class ColorWordsActivity extends AppCompatActivity {
         (rect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(timerActif == true){
+                    timerExpo.cancel();
+                }
                 resPartiePrecedente = true;
                 Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
                 nb_victoire++;
                 Log.d("victoires: ",""+nb_victoire);
                 changeGame();
-                changeTimer(true);
+                resetTimer();
+                //reduireTempsExposition();
             }
         });
 
         (rect2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(timerActif == true){
+                    timerExpo.cancel();
+                }
                 resPartiePrecedente = false;
                 Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 nb_defaite++;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
-                changeTimer(false);
+                resetTimer();
+                //reduireTempsExposition();
             }
         });
 
         (rect3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(timerActif == true){
+                    timerExpo.cancel();
+                }
                 resPartiePrecedente = false;
                 Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                 nb_defaite++;
                 Log.d("defaites: ",""+nb_defaite);
                 changeGame();
-                changeTimer(false);
+                resetTimer();
+                //reduireTempsExposition();
             }
         });
     }
@@ -224,6 +249,7 @@ public class ColorWordsActivity extends AppCompatActivity {
         Drawable drawable2 = res.getDrawable(R.drawable.rectangle2);
         Drawable drawable3 = res.getDrawable(R.drawable.rectangle3);
 
+        mot.setVisibility(View.VISIBLE);
         correct_color = setRandomColor();
         color2 = setRandomColor();
         color3 = setRandomColor();
@@ -266,6 +292,7 @@ public class ColorWordsActivity extends AppCompatActivity {
         Drawable drawable3 = res.getDrawable(R.drawable.rectangle3);
         String rndColorString = setRandomColorString();
 
+        mot.setVisibility(View.VISIBLE);
         correct_color = listColor.get(rndColorString);
         color2 = setRandomColor();
         color3 = setRandomColor();
@@ -321,9 +348,51 @@ public class ColorWordsActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
+                nb_defaite++;
+                changeGame();
+                resetTimer();
             }
         };
         new_ti.start();
+    }
+
+    private void resetTimer(){
+        //Création d'un timer
+        final TextView timer = findViewById(R.id.timer);
+
+        new_ti.cancel();
+        new_ti = new CountDownTimer(maxtime, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timer.setText("Temps restant: " + millisUntilFinished / 1000);
+                timeleft = millisUntilFinished;
+            }
+
+            public void onFinish() {
+                nb_defaite++;
+                changeGame();
+                resetTimer();
+            }
+        };
+        new_ti.start();
+    }
+
+    private void reduireTempsExposition(){
+
+        tempsexposition = 2000;
+        timerActif = true;
+        timerExpo = new CountDownTimer(tempsexposition, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
+                TextView mot = findViewById(R.id.mot);
+                mot.setVisibility(View.GONE);
+                timerActif = false;
+            }
+        };
+        timerExpo.start();
     }
 
     private void jouerRegle(Regle regle){
@@ -334,16 +403,57 @@ public class ColorWordsActivity extends AppCompatActivity {
                 break;
             case "Diminution du temps consacré au timer":
                 changeTimer(false);
+                reduireTempsExposition();
+                break;
             default:
                 break;
         }
     }
 
     private void creerRegle(){
-        //Création d'un timer
-        final TextView timer = findViewById(R.id.timer);
-        Regle regle = new Regle(session.getUserId(), 1, Float.parseFloat(timer.getText().toString()), variante, resPartiePrecedente, 5, "");
+        Regle regle = new Regle(userId,
+                1,
+                timeleft,
+                variante,
+                resPartiePrecedente,
+                5,
+                "Test");
+    }
 
+    @Override
+    public void onBackPressed() {
+        final TextView timer = findViewById(R.id.timer);
+        new_ti.cancel();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Quitter le jeu?")
+                .setCancelable(false)
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ColorWordsActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new_ti = new CountDownTimer(timeleft, 1000) {
+
+                            public void onTick(long millisUntilFinished) {
+                                timer.setText("Temps restant: " + millisUntilFinished / 1000);
+                                timeleft = millisUntilFinished;
+                            }
+
+                            public void onFinish() {
+                                nb_defaite++;
+                                changeGame();
+                                resetTimer();
+                            }
+                        };
+                        new_ti.start();
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 //    /**
