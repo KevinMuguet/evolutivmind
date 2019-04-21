@@ -1,13 +1,20 @@
 package com.example.muguet.evolutivmind.ia;
 
-public class Regle {
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    private int idJoueur; // L'id unique du joueur qui va permettre d'identifier les joueurs
-    private int idJeu;    // L'id unique du jeu qui va permettre d'identifier les jeux disponibles dans l'application
-    private float timeRestant; // Le temps restant au jeu avant la fin de la partie
-    private int varianteJeu;
-    private boolean resPartiePrecedente; // Victoire ou Défaite du joueur sur la partie précédente afin de réguler au mieux
-    private int poids; // Cet attribut permet de mesurer la pertinence de l'association action et situation
+import java.util.Random;
+
+@Entity
+public class Regle {
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+    public int idJoueur; // L'id unique du joueur qui va permettre d'identifier les joueurs
+    public int idJeu;    // L'id unique du jeu qui va permettre d'identifier les jeux disponibles dans l'application
+    public float timeRestant; // Le temps restant au jeu avant la fin de la partie
+    public int varianteJeu;
+    public boolean resPartiePrecedente; // Victoire ou Défaite du joueur sur la partie précédente afin de réguler au mieux
+    public int poids; // Cet attribut permet de mesurer la pertinence de l'association action et situation
 
     public String getAction() {
         return action;
@@ -24,7 +31,6 @@ public class Regle {
         this.poids = poids;
         this.action = action;
     }
-    // Partie Enum
         // COLORWORDS
         public static String param1 = "Augmentation du temps consacré au timer";
         public static String param2 = "Diminution du temps consacré au timer";

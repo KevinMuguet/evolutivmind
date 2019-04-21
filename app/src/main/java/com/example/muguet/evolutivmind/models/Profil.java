@@ -8,6 +8,11 @@ public class Profil {
 
     @PrimaryKey(autoGenerate = true)
     public int id;
+
+    public String getNom() {
+        return nom;
+    }
+
     public String nom;
     public int niveau;
     public int experience;

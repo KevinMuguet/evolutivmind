@@ -46,19 +46,18 @@ public class ColorWordsActivity extends AppCompatActivity {
     private CountDownTimer new_ti;
     private CountDownTimer timerExpo;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colorwords);
 
-        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
-
+        resPartiePrecedente = true;
         SharedPreferences sharedpreferences = getSharedPreferences("MyPref",
                 Context.MODE_PRIVATE);
         String loginFromSP = sharedpreferences.getString("login", null);
 
+        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
         userId = db_loc.profilDao().getProfil(loginFromSP).getId();
 
         ImageView rect = findViewById(R.id.rectangle);
@@ -107,6 +106,7 @@ public class ColorWordsActivity extends AppCompatActivity {
         (rect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                creerRegle();
                 if(timerActif == true){
                     timerExpo.cancel();
                 }
@@ -123,6 +123,7 @@ public class ColorWordsActivity extends AppCompatActivity {
         (rect2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                creerRegle();
                 if(timerActif == true){
                     timerExpo.cancel();
                 }
@@ -139,6 +140,7 @@ public class ColorWordsActivity extends AppCompatActivity {
         (rect3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                creerRegle();
                 if(timerActif == true){
                     timerExpo.cancel();
                 }
@@ -403,6 +405,10 @@ public class ColorWordsActivity extends AppCompatActivity {
                 break;
             case "Diminution du temps consacré au timer":
                 changeTimer(false);
+                break;
+            case "Modification du mot et de la couleur avec laquelle il est écrit en cours de jeu":
+                break;
+            case "Réduire le temps d'exposition du mot":
                 reduireTempsExposition();
                 break;
             default:
@@ -411,14 +417,39 @@ public class ColorWordsActivity extends AppCompatActivity {
     }
 
     private void creerRegle(){
+        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
+
         Regle regle = new Regle(userId,
                 1,
                 timeleft,
                 variante,
                 resPartiePrecedente,
                 5,
-                "Test");
+                randomAction());
+
+        db_loc.regleDao().insert(regle);
     }
+
+    public String randomAction(){
+        String action = "";
+        Random random = new Random();
+        int res = random.nextInt(3);
+        if(res == 0){
+            action = "Augmentation du temps consacré au timer";
+        }
+        if (res == 1){
+            action = "Diminution du temps consacré au timer";
+        }
+        if (res == 2){
+            action = "Modification du mot et de la couleur avec laquelle il est écrit en cours de jeu";
+        }
+        if (res == 3){
+            action = "Réduire le temps d'exposition du mot";
+        }
+        return action;
+    }
+
 
     @Override
     public void onBackPressed() {

@@ -1,7 +1,6 @@
 package com.example.muguet.evolutivmind.ia;
 
 import androidx.room.*;
-import com.example.muguet.evolutivmind.models.Statistique;
 
 import java.util.List;
 
@@ -15,8 +14,11 @@ public interface RegleDAO {
     void update(Regle... regle);
 
     @Delete
-    void delete(Statistique... regle);
+    void delete(Regle... regle);
 
     @Query("SELECT * FROM regle")
-    List<Regle> getAllProfil();
+    List<Regle> getAllRegle();
+
+    @Query("SELECT `action` FROM regle WHERE id=:id")
+    String getAction(final int id);
 }

@@ -4,14 +4,17 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import com.example.muguet.evolutivmind.ia.Regle;
+import com.example.muguet.evolutivmind.ia.RegleDAO;
 
-@Database(entities = {Profil.class, Statistique.class}, version = 1)
+@Database(entities = {Profil.class, Statistique.class, Regle.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
 
     public abstract ProfilDAO profilDao();
     public abstract StatistiqueDAO statistiqueDao();
+    public abstract RegleDAO regleDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {

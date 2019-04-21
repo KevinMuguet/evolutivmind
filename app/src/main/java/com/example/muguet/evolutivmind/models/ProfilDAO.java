@@ -14,7 +14,7 @@ public interface ProfilDAO {
     void update(Profil... profil);
 
     @Delete
-    void delete(Statistique... profil);
+    void delete(Profil... profil);
 
     @Query("SELECT * FROM profil")
     List<Profil> getAllProfil();
