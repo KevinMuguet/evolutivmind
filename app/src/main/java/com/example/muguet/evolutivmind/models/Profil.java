@@ -17,6 +17,12 @@ public class Profil {
     public int niveau;
     public int experience;
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int age;
+
     public int getId() {
         return id;
     }

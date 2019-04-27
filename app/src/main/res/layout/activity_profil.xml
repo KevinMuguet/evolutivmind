@@ -7,6 +7,10 @@
         android:layout_height="match_parent"
         tools:context=".views.ProfilActivity">
 
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/nbVictoire"/>
     <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_view_profil"
             android:layout_width="200dp"

@@ -10,6 +10,59 @@ public class Regle {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public int idJoueur; // L'id unique du joueur qui va permettre d'identifier les joueurs
+
+    public int getIdJoueur() {
+        return idJoueur;
+    }
+
+    public void setIdJoueur(int idJoueur) {
+        this.idJoueur = idJoueur;
+    }
+
+    public int getIdJeu() {
+        return idJeu;
+    }
+
+    public void setIdJeu(int idJeu) {
+        this.idJeu = idJeu;
+    }
+
+    public float getTimeRestant() {
+        return timeRestant;
+    }
+
+    public void setTimeRestant(float timeRestant) {
+        this.timeRestant = timeRestant;
+    }
+
+    public int getVarianteJeu() {
+        return varianteJeu;
+    }
+
+    public void setVarianteJeu(int varianteJeu) {
+        this.varianteJeu = varianteJeu;
+    }
+
+    public boolean isResPartiePrecedente() {
+        return resPartiePrecedente;
+    }
+
+    public void setResPartiePrecedente(boolean resPartiePrecedente) {
+        this.resPartiePrecedente = resPartiePrecedente;
+    }
+
+    public int getPoids() {
+        return poids;
+    }
+
+    public void setPoids(int poids) {
+        this.poids = poids;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
     public int idJeu;    // L'id unique du jeu qui va permettre d'identifier les jeux disponibles dans l'application
     public float timeRestant; // Le temps restant au jeu avant la fin de la partie
     public int varianteJeu;
