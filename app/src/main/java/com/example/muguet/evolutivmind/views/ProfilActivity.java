@@ -3,6 +3,7 @@ package com.example.muguet.evolutivmind.views;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ public class ProfilActivity extends AppCompatActivity {
 
     PieChartView pieChartView;
     TextView experience;
-    TextView level;
+    TextView niveau;
     TextView username;
 
     @Override
@@ -31,7 +32,7 @@ public class ProfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profil);
 
         experience = findViewById(R.id.experience);
-        level = findViewById(R.id.level);
+        niveau = findViewById(R.id.niveau);
         username = findViewById(R.id.username);
 
         SharedPreferences sharedpreferences = getSharedPreferences("MyPref",
@@ -42,8 +43,11 @@ public class ProfilActivity extends AppCompatActivity {
         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
         int userId = db_loc.profilDao().getProfil(loginFromSP).getId();
-        experience.setText(String.valueOf(db_loc.profilDao().getProfilById(userId).getExperience()));
-        level.setText(String.valueOf(db_loc.profilDao().getProfilById(userId).getNiveau()));
+        String playerExp = String.valueOf(db_loc.profilDao().getProfilById(userId).getExperience());
+        String playerLevel = String.valueOf(db_loc.profilDao().getProfilById(userId).getNiveau());
+
+        experience.setText(playerExp);
+        niveau.setText(playerLevel);
         Statistique stat = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "ColorWords");
         int nbVictoire = stat.getVictoires();
         int nbDefaites = stat.getDefaites();
