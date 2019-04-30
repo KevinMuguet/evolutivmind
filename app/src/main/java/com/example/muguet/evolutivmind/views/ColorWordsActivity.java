@@ -20,6 +20,7 @@ import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.ia.AlgoGen;
 import com.example.muguet.evolutivmind.ia.Regle;
 import com.example.muguet.evolutivmind.models.AppDatabase;
+import com.example.muguet.evolutivmind.models.Profil;
 import com.example.muguet.evolutivmind.models.Session;
 import com.example.muguet.evolutivmind.models.Statistique;
 
@@ -42,6 +43,8 @@ public class ColorWordsActivity extends AppCompatActivity {
     private boolean resPartiePrecedente;
     private boolean timerActif;
     private long timeleft;
+    private int experienceGagne = 0;
+    private int levelUp = 0;
     private long maxtime = 6000;
     private long tempsexposition;
     private int userId;
@@ -116,6 +119,16 @@ public class ColorWordsActivity extends AppCompatActivity {
                 resPartiePrecedente = true;
                 Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
                 nb_victoire++;
+                if(experienceGagne == 100){
+                    experienceGagne = 0;
+                    levelUp += 1;
+                }else{
+                    if(variante == 1){
+                        experienceGagne += 10;
+                    }else{
+                        experienceGagne += 20;
+                    }
+                }
                 Log.d("victoires: ",""+nb_victoire);
                 try { Thread.sleep(2000); }
                 catch (InterruptedException ex) { android.util.Log.d("Erreur: ", ex.toString()); }
@@ -476,19 +489,24 @@ public class ColorWordsActivity extends AppCompatActivity {
 
                         //S'il n'y pas de statistique pour ce joueur, on la crée
                         if(db_loc.statistiqueDao().countStatistique(userId, "ColorWords") == 0) {
-                            Statistique statistique_colorwords = new Statistique();
-                            statistique_colorwords.setVictoires(nb_victoire);
-                            statistique_colorwords.setDefaites(nb_defaite);
-                            statistique_colorwords.setJeu("ColorWords");
-                            statistique_colorwords.setUserId(userId);
-                            db_loc.statistiqueDao().insert(statistique_colorwords);
+                            Statistique statistiqueColorwords = new Statistique();
+                            statistiqueColorwords.setVictoires(nb_victoire);
+                            statistiqueColorwords.setDefaites(nb_defaite);
+                            statistiqueColorwords.setJeu("ColorWords");
+                            statistiqueColorwords.setUserId(userId);
+                            db_loc.statistiqueDao().insert(statistiqueColorwords);
                         }else{
                             //S'il y a déjà des statistiques pour ce joueur, on la met à jour
-                            Statistique statistique_joueur = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "ColorWords");
-                            statistique_joueur.setVictoires(statistique_joueur.getVictoires()+nb_victoire);
-                            statistique_joueur.setDefaites(statistique_joueur.getDefaites()+nb_defaite);
-                            db_loc.statistiqueDao().update(statistique_joueur);
+                            Statistique statistiqueJoueur = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "ColorWords");
+                            statistiqueJoueur.setVictoires(statistiqueJoueur.getVictoires()+nb_victoire);
+                            statistiqueJoueur.setDefaites(statistiqueJoueur.getDefaites()+nb_defaite);
+                            db_loc.statistiqueDao().update(statistiqueJoueur);
                         }
+                        //On met à jour le profil du joueur
+                        Profil joueur = db_loc.profilDao().getProfilById(userId);
+                        joueur.setExperience(joueur.getExperience()+experienceGagne);
+                        joueur.setNiveau(joueur.getNiveau()+levelUp);
+                        db_loc.profilDao().update(joueur);
                         ColorWordsActivity.this.finish();
                     }
                 })

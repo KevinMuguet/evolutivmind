@@ -23,8 +23,8 @@ public class Statistique {
         return defaites;
     }
 
-    public int victoires;
-    public int defaites;
+    public int victoires = 0;
+    public int defaites = 0;
     public int userId;
 
     public void setVictoires(int victoires){

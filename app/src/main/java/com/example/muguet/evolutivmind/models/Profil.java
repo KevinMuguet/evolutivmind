@@ -14,6 +14,19 @@ public class Profil {
     }
 
     public String nom;
+
+    public int getNiveau() {
+        return niveau;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
     public int niveau;
     public int experience;
 
