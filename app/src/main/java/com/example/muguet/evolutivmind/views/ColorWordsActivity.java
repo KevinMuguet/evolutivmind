@@ -37,23 +37,36 @@ public class ColorWordsActivity extends AppCompatActivity {
 
     private int nb_victoire = 0;
     private int nb_defaite = 0;
+
     private List<String> list;
+    private List<Regle> reglesValide;
+    private List<Regle> listRegle;
+
     private HashMap<String, Integer> listColor = new HashMap<>();
     private int correct_color;
     private GifImageView levelUpAnim;
     private LottieAnimationView gameAnimationView;
     private int color2;
     private int color3;
-    private Session session;
+
     private int variante;
     private boolean resPartiePrecedente;
-    private boolean timerActif;
     private long timeleft;
+
+    private boolean timerActif;
     private int experienceGagne = 0;
     private int levelUp = 0;
     private long maxtime = 10000;
     private long tempsexposition;
     private int userId;
+
+    //Variables pour stocker les informations des conditions des règles
+    private int userIdR;
+    private int idJeuR;
+    private float timeleftR;
+    private int varianteR;
+    private int maxPoids;
+    private boolean resPartiePrecedenteR;
 
     private boolean isReady = false;
 
@@ -93,12 +106,13 @@ public class ColorWordsActivity extends AppCompatActivity {
         listColor.put("Gris", Color.GRAY);
 
         list = new ArrayList<>(listColor.keySet());
+        reglesValide = new ArrayList<>();
 
         new_ti = new CountDownTimer(maxtime, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("Temps restant: " + millisUntilFinished / 1000);
-                timeleft = millisUntilFinished;
+                timeleft = millisUntilFinished / 1000;
             }
 
             public void onFinish() {
@@ -176,11 +190,9 @@ public class ColorWordsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(isReady) {
                     isReady = false;
-                    creerRegle();
                     if (timerActif == true) {
                         timerExpo.cancel();
                     }
-                    resPartiePrecedente = true;
 //                    Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
                     nb_victoire++;
                     if (experienceGagne >= 100) {
@@ -203,7 +215,8 @@ public class ColorWordsActivity extends AppCompatActivity {
 //                    }
                     lottieDisplay(gameAnimationView, R.raw.check_orange);
                     Log.d("lottie", "lottieDisplayed");
-                    //reduireTempsExposition();
+                    verificationRegle();
+                    resPartiePrecedente = true;
                 }
             }
         });
@@ -213,11 +226,9 @@ public class ColorWordsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(isReady) {
                     isReady = false;
-                    creerRegle();
                     if (timerActif == true) {
                         timerExpo.cancel();
                     }
-                    resPartiePrecedente = false;
 //                    Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                     nb_defaite++;
                     Log.d("defaites: ", "" + nb_defaite);
@@ -228,7 +239,8 @@ public class ColorWordsActivity extends AppCompatActivity {
 //                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
                     Log.d("lottie", "lottieDisplayed");
-                    //reduireTempsExposition();
+                    verificationRegle();
+                    resPartiePrecedente = false;
                 }
             }
         });
@@ -238,11 +250,9 @@ public class ColorWordsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(isReady) {
                     isReady = false;
-                    creerRegle();
                     if (timerActif == true) {
                         timerExpo.cancel();
                     }
-                    resPartiePrecedente = false;
 //                    Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                     nb_defaite++;
                     Log.d("defaites: ", "" + nb_defaite);
@@ -253,7 +263,8 @@ public class ColorWordsActivity extends AppCompatActivity {
 //                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
                     Log.d("lottie", "lottieDisplayed");
-                    //reduireTempsExposition();
+                    verificationRegle();
+                    resPartiePrecedente = false;
                 }
             }
         });
@@ -446,7 +457,7 @@ public class ColorWordsActivity extends AppCompatActivity {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("Temps restant: " + millisUntilFinished / 1000);
-                timeleft = millisUntilFinished;
+                timeleft = millisUntilFinished/1000;
             }
 
             public void onFinish() {
@@ -466,7 +477,7 @@ public class ColorWordsActivity extends AppCompatActivity {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("Temps restant: " + millisUntilFinished / 1000);
-                timeleft = millisUntilFinished;
+                timeleft = millisUntilFinished/1000;
             }
 
             public void onFinish() {
@@ -504,14 +515,13 @@ public class ColorWordsActivity extends AppCompatActivity {
             case "Diminution du temps consacré au timer":
                 changeTimer(false);
                 break;
-            case "Modification du mot et de la couleur avec laquelle il est écrit en cours de jeu":
-                break;
             case "Réduire le temps d'exposition du mot":
                 reduireTempsExposition();
                 break;
             default:
                 break;
         }
+        Log.d("Regle joue: ",""+regle.getAction());
     }
 
     private void creerRegle(){
@@ -526,7 +536,55 @@ public class ColorWordsActivity extends AppCompatActivity {
                 5,
                 randomAction());
 
+        Log.d("Regle cree: ",""+userId+"/1/"+timeleft+"/"+variante+"/"+resPartiePrecedente);
         db_loc.regleDao().insert(regle);
+    }
+
+    private void verificationRegle(){
+        maxPoids = 0;
+        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
+        listRegle = db_loc.regleDao().getAllRegle();
+        for(int i = 0; i < listRegle.size(); i++){
+            userIdR = listRegle.get(i).idJoueur;
+            idJeuR = listRegle.get(i).idJeu;
+            timeleftR = listRegle.get(i).timeRestant;
+            varianteR = listRegle.get(i).varianteJeu;
+            resPartiePrecedenteR = listRegle.get(i).resPartiePrecedente;
+            if(userId == userIdR && idJeuR == 1 && timeleft == timeleftR && variante == varianteR && resPartiePrecedente == resPartiePrecedenteR){
+                reglesValide.add(listRegle.get(i));
+            }
+        }
+        if(reglesValide.size() != 0){
+            if(reglesValide.size() == 1){
+                jouerRegle(reglesValide.get(0));
+            }else{
+                //Obtenir le poids le plus élevé
+                for(int i = 0; i < reglesValide.size(); i++){
+                    if(reglesValide.get(i).poids > maxPoids){
+                        maxPoids =reglesValide.get(i).poids;
+                    }
+                }
+                //Supprimer les règles ayant un poids faible
+                for(int i = 0; i < reglesValide.size(); i++){
+                    if(reglesValide.get(i).poids != maxPoids){
+                        reglesValide.remove(i);
+                    }
+                }
+                //Jouer une regle aléatoire parmi les restantes
+                Random rnd = new Random();
+                int posRegle = rnd.nextInt(reglesValide.size());
+                jouerRegle(reglesValide.get(posRegle));
+            }
+            Log.d("Passe","");
+        }else{
+            Log.d("Passe2","");
+            creerRegle();
+        }
+        if(reglesValide.size() != 0){
+            reglesValide.clear();
+        }
+        listRegle.clear();
     }
 
     public String randomAction(){
@@ -540,9 +598,6 @@ public class ColorWordsActivity extends AppCompatActivity {
             action = "Diminution du temps consacré au timer";
         }
         if (res == 2){
-            action = "Modification du mot et de la couleur avec laquelle il est écrit en cours de jeu";
-        }
-        if (res == 3){
             action = "Réduire le temps d'exposition du mot";
         }
         return action;
@@ -587,17 +642,16 @@ public class ColorWordsActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Non", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        new_ti = new CountDownTimer(timeleft, 1000) {
+                        new_ti = new CountDownTimer(timeleft*1000+1000, 1000) {
 
                             public void onTick(long millisUntilFinished) {
                                 timer.setText("Temps restant: " + millisUntilFinished / 1000);
-                                timeleft = millisUntilFinished;
+                                timeleft = millisUntilFinished / 1000;
                             }
 
                             public void onFinish() {
                                 nb_defaite++;
-                                changeGame();
-                                resetTimer();
+                                lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
                             }
                         };
                         new_ti.start();
