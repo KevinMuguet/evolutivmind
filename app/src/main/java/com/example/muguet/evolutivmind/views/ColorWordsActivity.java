@@ -1,5 +1,6 @@
 package com.example.muguet.evolutivmind.views;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.icu.util.TimeUnit;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.room.Room;
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.ia.AlgoGen;
 import com.example.muguet.evolutivmind.ia.Regle;
@@ -45,9 +48,11 @@ public class ColorWordsActivity extends AppCompatActivity {
     private long timeleft;
     private int experienceGagne = 0;
     private int levelUp = 0;
-    private long maxtime = 6000;
+    private long maxtime = 10000;
     private long tempsexposition;
     private int userId;
+
+    private boolean isReady = false;
 
     private CountDownTimer new_ti;
     private CountDownTimer timerExpo;
@@ -71,6 +76,9 @@ public class ColorWordsActivity extends AppCompatActivity {
         ImageView rect3 = findViewById(R.id.rectangle3);
         //Création d'un timer
         final TextView timer = findViewById(R.id.timer);
+        final LottieAnimationView gameAnimationView = findViewById(R.id.animation_view_game);
+
+        gameAnimationView.setVisibility(View.INVISIBLE);
 
         listColor.put("Bleu", Color.BLUE);
         listColor.put("Rouge", Color.RED);
@@ -90,15 +98,62 @@ public class ColorWordsActivity extends AppCompatActivity {
 
             public void onFinish() {
                 nb_defaite++;
-                changeGame();
-                resetTimer();
+                lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
             }
         };
         new_ti.start();
 
+        gameAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                new_ti.cancel();
+                Log.d("tick","canceled");
+//                Log.d("debugPerso","start");
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+//                Log.d("debugPerso","end");
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Do something after 100ms
+                        gameAnimationView.setVisibility(View.INVISIBLE);
+                        resetGame();
+                    }
+                }, 500);
+
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+//                Log.d("debugPerso","cancel");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                gameAnimationView.pauseAnimation();
+//                Log.d("debugPerso","repeat");
+            }
+        });
+
+        isReady = true;
         newGame();
         verif(rect, rect2, rect3);
 
+    }
+
+    private void lottieDisplay(LottieAnimationView _loLottieAnimationView, int _rawRes) {
+        _loLottieAnimationView.setVisibility(View.VISIBLE);
+        _loLottieAnimationView.setAnimation(_rawRes);
+        _loLottieAnimationView.playAnimation();
+    }
+
+    private void resetGame() {
+        changeGame();
+        resetTimer();
     }
 
     /**
@@ -109,70 +164,90 @@ public class ColorWordsActivity extends AppCompatActivity {
      */
     private void verif(final ImageView rect, final ImageView rect2, final ImageView rect3){
 
+        final LottieAnimationView gameAnimationView = findViewById(R.id.animation_view_game);
+
         (rect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                creerRegle();
-                if(timerActif == true){
-                    timerExpo.cancel();
-                }
-                resPartiePrecedente = true;
-                Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
-                nb_victoire++;
-                if(experienceGagne == 100){
-                    experienceGagne = 0;
-                    levelUp += 1;
-                }else{
-                    if(variante == 1){
-                        experienceGagne += 10;
-                    }else{
-                        experienceGagne += 20;
+                if(isReady) {
+                    isReady = false;
+                    creerRegle();
+                    if (timerActif == true) {
+                        timerExpo.cancel();
                     }
+                    resPartiePrecedente = true;
+//                    Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
+                    nb_victoire++;
+                    if (experienceGagne == 100) {
+                        experienceGagne = 0;
+                        levelUp += 1;
+                    } else {
+                        if (variante == 1) {
+                            experienceGagne += 10;
+                        } else {
+                            experienceGagne += 20;
+                        }
+                    }
+                    Log.d("victoires: ", "" + nb_victoire);
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException ex) {
+//                        android.util.Log.d("Erreur: ", ex.toString());
+//                    }
+                    lottieDisplay(gameAnimationView, R.raw.check_orange);
+                    Log.d("lottie", "lottieDisplayed");
+                    //reduireTempsExposition();
                 }
-                Log.d("victoires: ",""+nb_victoire);
-                try { Thread.sleep(2000); }
-                catch (InterruptedException ex) { android.util.Log.d("Erreur: ", ex.toString()); }
-                changeGame();
-                resetTimer();
-                //reduireTempsExposition();
             }
         });
 
         (rect2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                creerRegle();
-                if(timerActif == true){
-                    timerExpo.cancel();
+                if(isReady) {
+                    isReady = false;
+                    creerRegle();
+                    if (timerActif == true) {
+                        timerExpo.cancel();
+                    }
+                    resPartiePrecedente = false;
+//                    Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
+                    nb_defaite++;
+                    Log.d("defaites: ", "" + nb_defaite);
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException ex) {
+//                        android.util.Log.d("Erreur: ", ex.toString());
+//                    }
+                    lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
+                    Log.d("lottie", "lottieDisplayed");
+                    //reduireTempsExposition();
                 }
-                resPartiePrecedente = false;
-                Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
-                nb_defaite++;
-                Log.d("defaites: ",""+nb_defaite);
-                try { Thread.sleep(2000); }
-                catch (InterruptedException ex) { android.util.Log.d("Erreur: ", ex.toString()); }
-                changeGame();
-                resetTimer();
-                //reduireTempsExposition();
             }
         });
 
         (rect3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                creerRegle();
-                if(timerActif == true){
-                    timerExpo.cancel();
+                if(isReady) {
+                    isReady = false;
+                    creerRegle();
+                    if (timerActif == true) {
+                        timerExpo.cancel();
+                    }
+                    resPartiePrecedente = false;
+//                    Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
+                    nb_defaite++;
+                    Log.d("defaites: ", "" + nb_defaite);
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException ex) {
+//                        android.util.Log.d("Erreur: ", ex.toString());
+//                    }
+                    lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
+                    Log.d("lottie", "lottieDisplayed");
+                    //reduireTempsExposition();
                 }
-                resPartiePrecedente = false;
-                Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
-                nb_defaite++;
-                Log.d("defaites: ",""+nb_defaite);
-                try { Thread.sleep(2000); }
-                catch (InterruptedException ex) { android.util.Log.d("Erreur: ", ex.toString()); }
-                changeGame();
-                resetTimer();
-                //reduireTempsExposition();
             }
         });
     }
@@ -264,7 +339,6 @@ public class ColorWordsActivity extends AppCompatActivity {
 
         TextView mot = findViewById(R.id.mot);
         TextView question = findViewById(R.id.question);
-        TextView reponse = findViewById(R.id.reponse);
         ImageView rect = findViewById(R.id.rectangle);
         ImageView rect2 = findViewById(R.id.rectangle2);
         ImageView rect3 = findViewById(R.id.rectangle3);
@@ -281,8 +355,6 @@ public class ColorWordsActivity extends AppCompatActivity {
         question.setText("De quelle couleur le mot est-il écrit?");
         mot.setTextColor(correct_color);
         mot.setText(setRandomColorString());
-
-        reponse.setText("");
 
         drawable.setColorFilter(correct_color, PorterDuff.Mode.SRC_ATOP);
         rect.setBackground(drawable);
@@ -306,7 +378,6 @@ public class ColorWordsActivity extends AppCompatActivity {
 
         TextView mot = findViewById(R.id.mot);
         TextView question = findViewById(R.id.question);
-        TextView reponse = findViewById(R.id.reponse);
         ImageView rect = findViewById(R.id.rectangle);
         ImageView rect2 = findViewById(R.id.rectangle2);
         ImageView rect3 = findViewById(R.id.rectangle3);
@@ -325,8 +396,6 @@ public class ColorWordsActivity extends AppCompatActivity {
         mot.setTextColor(color2);
         mot.setText(rndColorString);
 
-        reponse.setText("");
-
         drawable.setColorFilter(correct_color, PorterDuff.Mode.SRC_ATOP);
         rect.setBackground(drawable);
 
@@ -344,6 +413,7 @@ public class ColorWordsActivity extends AppCompatActivity {
      * Fonction choisissant aléatoirement le jeu
      */
     private void changeGame(){
+        isReady = true;
         Random rnd = new Random();
         int game = rnd.nextInt(2);
         if(game == 1){

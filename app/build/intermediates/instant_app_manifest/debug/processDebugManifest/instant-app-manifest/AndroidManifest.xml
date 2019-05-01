@@ -9,8 +9,6 @@
         android:minSdkVersion="19"
         android:targetSdkVersion="28" />
 
-    <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
-    <!-- <uses-sdk android:minSdkVersion="14" /> -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -25,21 +23,20 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/AppTheme" >
+        <activity android:name="com.example.muguet.evolutivmind.views.ProfilActivity" >
+        </activity>
         <activity
-            android:name="com.example.muguet.evolutivmind.views.GamesActivity"
-            android:label="@string/title_activity_games"
+            android:name="com.example.muguet.evolutivmind.views.OptionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name="com.example.muguet.evolutivmind.views.ColorWordsActivity"
-            android:label="@string/title_activity_games"
+            android:name="com.example.muguet.evolutivmind.views.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name="com.example.muguet.evolutivmind.views.MainActivity"
-            android:label="@string/title_activity_main"
+            android:name="com.example.muguet.evolutivmind.views.HubActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -47,6 +44,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.muguet.evolutivmind.views.GamesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.example.muguet.evolutivmind.views.ColorWordsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.example.muguet.evolutivmind.views.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
         <service android:name="com.google.firebase.components.ComponentDiscoveryService" >
