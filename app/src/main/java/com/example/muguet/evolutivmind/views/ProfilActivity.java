@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.room.Room;
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Statistique;
@@ -70,12 +68,12 @@ public class ProfilActivity extends AppCompatActivity {
 
         List pieData = new ArrayList<>();
 
-        pieData.add(new SliceValue(nbVictoire, Color.YELLOW).setLabel(nbVictoire+"V"));
-        pieData.add(new SliceValue(nbDefaites, Color.GRAY).setLabel(nbDefaites+"D"));
+        pieData.add(new SliceValue(nbVictoire, Color.GREEN).setLabel(nbVictoire+"V"));
+        pieData.add(new SliceValue(nbDefaites, Color.RED).setLabel(nbDefaites+"D"));
 
         PieChartData pieChartData = new PieChartData(pieData);
         pieChartData.setHasLabels(true).setValueLabelTextSize(14);
-        pieChartData.setHasCenterCircle(true).setCenterText1("ColorWords").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#130e07"));
+        pieChartData.setHasCenterCircle(true).setCenterText1("Ratio").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#130e07"));
         pieChartView.setPieChartData(pieChartData);
     }
 }
