@@ -7,6 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".views.OptionsActivity"
         android:background="@android:color/holo_orange_dark">
+
     <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_view_options"
             android:layout_width="150dp"
@@ -29,4 +30,5 @@
             android:layout_marginStart="161dp" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="162dp" android:layout_marginBottom="342dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

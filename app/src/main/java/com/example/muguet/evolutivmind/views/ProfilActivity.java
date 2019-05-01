@@ -61,7 +61,7 @@ public class ProfilActivity extends AppCompatActivity {
 
         PieChartData pieChartData = new PieChartData(pieData);
         pieChartData.setHasLabels(true).setValueLabelTextSize(14);
-        pieChartData.setHasCenterCircle(true).setCenterText1("ColorWords").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#0097A7"));
+        pieChartData.setHasCenterCircle(true).setCenterText1("ColorWords").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#130e07"));
         pieChartView.setPieChartData(pieChartData);
     }
 }

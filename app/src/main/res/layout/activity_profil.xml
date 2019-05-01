@@ -5,45 +5,57 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.ProfilActivity">
+        tools:context=".views.ProfilActivity"
+        android:background="@android:color/holo_orange_dark">
 
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/niveau"/>
+            android:layout_height="wrap_content" android:id="@+id/niveau"
+            android:layout_marginEnd="120dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="151dp"/>
     <TextView
             android:text="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/experience"
-            android:layout_marginEnd="66dp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="37dp"/>
+            android:layout_marginTop="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/niveau" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="132dp"/>
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/username"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="7dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="167dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="177dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="65dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="177dp"/>
     <lecho.lib.hellocharts.view.PieChartView
             android:id="@+id/chart"
-            android:layout_width="205dp"
-            android:layout_height="194dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="97dp" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="440dp" app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="7dp"/>
+            android:layout_width="177dp"
+            android:layout_height="161dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="117dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="117dp" android:layout_marginTop="42dp"
+            app:layout_constraintTop_toBottomOf="@+id/experience"/>
     <TextView
             android:text="Level :"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView5" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="101dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="37dp"/>
+            android:id="@+id/niveauTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="125dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="151dp" app:layout_constraintEnd_toStartOf="@+id/niveau"
+            android:layout_marginEnd="70dp"/>
     <TextView
             android:text="Experience :"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView6"
-            android:layout_marginBottom="40dp"
-            app:layout_constraintBottom_toTopOf="@+id/chart" tools:layout_editor_absoluteX="261dp"/>
+            android:id="@+id/experienceTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="110dp" app:layout_constraintEnd_toStartOf="@+id/experience"
+            android:layout_marginEnd="73dp"
+            app:layout_constraintHorizontal_bias="1.0" android:layout_marginTop="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/niveauTitle"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
