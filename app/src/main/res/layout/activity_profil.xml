@@ -12,31 +12,31 @@
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/niveau"
-            android:layout_marginEnd="120dp"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="151dp"/>
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/titreColorWords" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="117dp"/>
     <TextView
             android:text="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/experience"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="26dp"
             app:layout_constraintTop_toBottomOf="@+id/niveau" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="132dp"/>
+            android:layout_marginEnd="148dp"/>
     <TextView
             android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/username"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="177dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="65dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="177dp"/>
+            android:layout_width="169dp"
+            android:layout_height="32dp" android:id="@+id/username"
+            android:layout_marginEnd="60dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="36dp" android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            tools:text="syvan"/>
     <lecho.lib.hellocharts.view.PieChartView
             android:id="@+id/chart"
             android:layout_width="177dp"
             android:layout_height="161dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="117dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="117dp" android:layout_marginTop="42dp"
+            android:layout_marginEnd="117dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="117dp" android:layout_marginTop="25dp"
             app:layout_constraintTop_toBottomOf="@+id/experience"/>
     <TextView
             android:text="Level :"
@@ -44,18 +44,36 @@
             android:layout_height="wrap_content"
             android:id="@+id/niveauTitle"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="125dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="151dp" app:layout_constraintEnd_toStartOf="@+id/niveau"
-            android:layout_marginEnd="70dp"/>
+            android:layout_marginStart="117dp" android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/titreColorWords" app:layout_constraintEnd_toStartOf="@+id/niveau"
+            android:layout_marginEnd="81dp"/>
     <TextView
             android:text="Experience :"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/experienceTitle"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="110dp" app:layout_constraintEnd_toStartOf="@+id/experience"
-            android:layout_marginEnd="73dp"
-            app:layout_constraintHorizontal_bias="1.0" android:layout_marginTop="48dp"
-            app:layout_constraintTop_toBottomOf="@+id/niveauTitle"/>
+            android:layout_marginStart="117dp" android:layout_marginTop="26dp"
+            app:layout_constraintTop_toBottomOf="@+id/niveauTitle" app:layout_constraintEnd_toStartOf="@+id/experience"
+            android:layout_marginEnd="63dp"/>
+    <TextView
+            android:text="ColorWords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/titreColorWords"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="148dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="148dp" android:layout_marginTop="80dp"
+            app:layout_constraintTop_toBottomOf="@+id/username"/>
+    <Button
+            android:text="Retour"
+            android:layout_width="83dp"
+            android:layout_height="38dp"
+            android:id="@+id/retour"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="34dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp" app:layout_constraintEnd_toStartOf="@+id/username"
+            android:layout_marginEnd="65dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

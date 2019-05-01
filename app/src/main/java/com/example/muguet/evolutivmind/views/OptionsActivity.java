@@ -13,6 +13,8 @@ import android.util.Log;
 
 public class OptionsActivity extends AppCompatActivity {
 
+    Button retour;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,17 @@ public class OptionsActivity extends AppCompatActivity {
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         final SharedPreferences.Editor editor = pref.edit();
+
+        retour = findViewById(R.id.retour);
+
+        retour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         final LottieAnimationView lottieAnimationView = findViewById(R.id.animation_view_options);
         lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {

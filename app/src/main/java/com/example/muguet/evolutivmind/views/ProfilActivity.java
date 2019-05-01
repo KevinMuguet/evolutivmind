@@ -1,9 +1,12 @@
 package com.example.muguet.evolutivmind.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +28,7 @@ public class ProfilActivity extends AppCompatActivity {
     TextView experience;
     TextView niveau;
     TextView username;
+    Button retour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,16 @@ public class ProfilActivity extends AppCompatActivity {
         experience = findViewById(R.id.experience);
         niveau = findViewById(R.id.niveau);
         username = findViewById(R.id.username);
+        retour = findViewById(R.id.retour);
+
+        retour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         SharedPreferences sharedpreferences = getSharedPreferences("MyPref",
                 Context.MODE_PRIVATE);
