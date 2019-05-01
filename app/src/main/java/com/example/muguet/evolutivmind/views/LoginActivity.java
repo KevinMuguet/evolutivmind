@@ -22,7 +22,8 @@ public class LoginActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.btn_login);
 
-        final EditText editText = findViewById(R.id.login);
+        final EditText login = findViewById(R.id.login);
+        final EditText age = findViewById(R.id.age);
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         final SharedPreferences.Editor editor = pref.edit();
@@ -34,17 +35,18 @@ public class LoginActivity extends AppCompatActivity {
                 AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                         AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
 
-                editor.putString("login", editText.getText().toString());
-                Log.d("debug", editText.getText().toString());
+                editor.putString("login", login.getText().toString());
+                editor.putString("age", age.getText().toString());
+                Log.d("debug", login.getText().toString());
 
                 editor.apply();
 
-
-                if(db_loc.profilDao().getProfil(editText.getText().toString()) == null){
+                if(db_loc.profilDao().getProfil(login.getText().toString()) == null){
                     Profil nouveauProfil = new Profil();
                     nouveauProfil.setExperience(0);
                     nouveauProfil.setNiveau(1);
-                    nouveauProfil.setNom(editText.getText().toString());
+                    nouveauProfil.setNom(login.getText().toString());
+                    nouveauProfil.setAge(Integer.parseInt(age.getText().toString()));
                     db_loc.profilDao().insert(nouveauProfil);
                 }
 

@@ -22,4 +22,7 @@ public interface ProfilDAO {
     @Query("SELECT * FROM profil WHERE nom=:username")
     Profil getProfil(final String username);
 
+    @Query("SELECT * FROM profil WHERE id=:id")
+    Profil getProfilById(final int id);
+
 }
