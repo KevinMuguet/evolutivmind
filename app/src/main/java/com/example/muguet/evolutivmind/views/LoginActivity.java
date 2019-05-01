@@ -1,59 +1,182 @@
 package com.example.muguet.evolutivmind.views;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
+
+import android.content.Intent;
+import android.view.View;
+import android.widget.*;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Profil;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
+    private static final int REQUEST_SIGNUP = 0;
+    private ScrollView scrollView;
+    private AnimationDrawable animationDrawable;
+
+    @InjectView(R.id.username) EditText _username;
+    @InjectView(R.id.age) EditText _age;
+    @InjectView(R.id.btn_login) Button _loginButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.inject(this);
 
-        Button button = findViewById(R.id.btn_login);
+        // init layout
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
 
-        final EditText login = findViewById(R.id.login);
-        final EditText age = findViewById(R.id.age);
+        // initializing animation drawable by getting background from constraint layout
+        animationDrawable = (AnimationDrawable) scrollView.getBackground();
 
+        // setting enter fade animation duration to 5 seconds
+        animationDrawable.setEnterFadeDuration(5000);
+
+        // setting exit fade animation duration to 2 seconds
+        animationDrawable.setExitFadeDuration(2000);
+
+        animationDrawable.start();
+
+        _loginButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
+    }
+
+    public void login() {
+        Log.d(TAG, "Login");
+
+        if (!validate()) {
+            onLoginFailed();
+            return;
+        }
+
+        _loginButton.setEnabled(false);
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.Theme_AppCompat_DayNight_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Connexion...");
+        progressDialog.show();
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        // On complete call either onLoginSuccess or onLoginFailed
+                        onLoginSuccess();
+                        // onLoginFailed();
+                        progressDialog.dismiss();
+                    }
+                }, 3000);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+
+                // TODO: Implement successful signup logic here
+                // By default we just finish the Activity and log them in automatically
+                this.finish();
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // disable going back to the MainActivity
+        moveTaskToBack(true);
+    }
+
+    public void onLoginSuccess() {
+        _loginButton.setEnabled(true);
+        String email = _username.getText().toString();
+        String password = _age.getText().toString();
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         final SharedPreferences.Editor editor = pref.edit();
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
+        AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
 
-                editor.putString("login", login.getText().toString());
-                editor.putString("age", age.getText().toString());
-                Log.d("debug", login.getText().toString());
+        editor.putString("login", email);
+        editor.putString("age", password);
 
-                editor.apply();
+        editor.apply();
 
-                if(db_loc.profilDao().getProfil(login.getText().toString()) == null){
-                    Profil nouveauProfil = new Profil();
-                    nouveauProfil.setExperience(0);
-                    nouveauProfil.setNiveau(1);
-                    nouveauProfil.setNom(login.getText().toString());
-                    nouveauProfil.setAge(Integer.parseInt(age.getText().toString()));
-                    db_loc.profilDao().insert(nouveauProfil);
-                }
+        Profil nouveauProfil = new Profil();
+        nouveauProfil.setExperience(0);
+        nouveauProfil.setNiveau(1);
+        nouveauProfil.setNom(email);
+        nouveauProfil.setAge(Integer.parseInt(password));
+        db_loc.profilDao().insert(nouveauProfil);
 
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void onLoginFailed() {
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+
+        _loginButton.setEnabled(true);
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+
+        String username = _username.getText().toString();
+        String age = _age.getText().toString();
+
+        /**
+        if (username.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+            _username.setError("enter a valid email address");
+            valid = false;
+        } else {
+            _username.setError(null);
+        }
+
+        if (age.isEmpty() || age.length() < 4 || age.length() > 10) {
+            _age.setError("between 4 and 10 alphanumeric characters");
+            valid = false;
+        } else {
+            _age.setError(null);
+        }
+         */
+
+        return valid;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (animationDrawable != null && !animationDrawable.isRunning()) {
+            // start the animation
+            animationDrawable.start();
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (animationDrawable != null && animationDrawable.isRunning()) {
+            // stop the animation
+            animationDrawable.stop();
+        }
     }
 }

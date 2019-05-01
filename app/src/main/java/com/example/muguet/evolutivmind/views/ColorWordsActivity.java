@@ -26,6 +26,7 @@ import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Profil;
 import com.example.muguet.evolutivmind.models.Session;
 import com.example.muguet.evolutivmind.models.Statistique;
+import pl.droidsonroids.gif.GifImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,8 @@ public class ColorWordsActivity extends AppCompatActivity {
     private List<String> list;
     private HashMap<String, Integer> listColor = new HashMap<>();
     private int correct_color;
+    private GifImageView levelUpAnim;
+    private LottieAnimationView gameAnimationView;
     private int color2;
     private int color3;
     private Session session;
@@ -62,6 +65,8 @@ public class ColorWordsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colorwords);
 
+        levelUpAnim = findViewById(R.id.levelup);
+
         resPartiePrecedente = true;
         SharedPreferences sharedpreferences = getSharedPreferences("MyPref",
                 Context.MODE_PRIVATE);
@@ -76,8 +81,8 @@ public class ColorWordsActivity extends AppCompatActivity {
         ImageView rect3 = findViewById(R.id.rectangle3);
         //Création d'un timer
         final TextView timer = findViewById(R.id.timer);
-        final LottieAnimationView gameAnimationView = findViewById(R.id.animation_view_game);
 
+        gameAnimationView = findViewById(R.id.animation_view_game);
         gameAnimationView.setVisibility(View.INVISIBLE);
 
         listColor.put("Bleu", Color.BLUE);
@@ -178,7 +183,9 @@ public class ColorWordsActivity extends AppCompatActivity {
                     resPartiePrecedente = true;
 //                    Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
                     nb_victoire++;
-                    if (experienceGagne == 100) {
+                    if (experienceGagne >= 100) {
+                        levelUpAnim.setVisibility(View.VISIBLE);
+                        levelUpAnim.setBackgroundResource(R.drawable.levelup);
                         experienceGagne = 0;
                         levelUp += 1;
                     } else {
@@ -413,6 +420,7 @@ public class ColorWordsActivity extends AppCompatActivity {
      * Fonction choisissant aléatoirement le jeu
      */
     private void changeGame(){
+        levelUpAnim.setVisibility(View.INVISIBLE);
         isReady = true;
         Random rnd = new Random();
         int game = rnd.nextInt(2);
@@ -443,8 +451,7 @@ public class ColorWordsActivity extends AppCompatActivity {
 
             public void onFinish() {
                 nb_defaite++;
-                changeGame();
-                resetTimer();
+                lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
             }
         };
         new_ti.start();
@@ -464,8 +471,7 @@ public class ColorWordsActivity extends AppCompatActivity {
 
             public void onFinish() {
                 nb_defaite++;
-                changeGame();
-                resetTimer();
+                lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
             }
         };
         new_ti.start();
@@ -521,7 +527,6 @@ public class ColorWordsActivity extends AppCompatActivity {
                 randomAction());
 
         db_loc.regleDao().insert(regle);
-
     }
 
     public String randomAction(){
