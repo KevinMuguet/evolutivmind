@@ -14,10 +14,18 @@ public class GamesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games);
         Button b_colorwords = findViewById(R.id.button_colorwords);
+        Button b_memorize = findViewById(R.id.button_memorize);
         b_colorwords.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), ColorWordsActivity.class);
+                startActivity(intent);
+            }
+        });
+        b_memorize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), MemorizeActivity.class);
                 startActivity(intent);
             }
         });
