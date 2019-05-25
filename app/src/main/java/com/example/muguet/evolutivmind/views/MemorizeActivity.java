@@ -118,20 +118,6 @@ public class MemorizeActivity extends AppCompatActivity {
         list = new ArrayList<>(listDrawable.keySet());
         reglesValide = new ArrayList<>();
 
-        new_ti = new CountDownTimer(maxtime, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                timer.setText("Temps restant: " + millisUntilFinished / 1000);
-                timeleft = millisUntilFinished / 1000;
-            }
-
-            public void onFinish() {
-                nb_defaite++;
-                lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
-            }
-        };
-        new_ti.start();
-
         gameAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -180,8 +166,8 @@ public class MemorizeActivity extends AppCompatActivity {
     }
 
     private void resetGame() {
+        new_ti.cancel();
         changeGame();
-        resetTimer();
     }
 
     /**
@@ -354,11 +340,16 @@ public class MemorizeActivity extends AppCompatActivity {
 
         variante = 1;
 
+        final TextView timer = findViewById(R.id.timer);
         ImageView figure = findViewById(R.id.figure);
         TextView question = findViewById(R.id.question);
         ImageView rep1 = findViewById(R.id.reponse1);
         ImageView rep2 = findViewById(R.id.reponse2);
         ImageView rep3 = findViewById(R.id.reponse3);
+
+        rep1.setVisibility(View.INVISIBLE);
+        rep2.setVisibility(View.INVISIBLE);
+        rep3.setVisibility(View.INVISIBLE);
 
         figure.setVisibility(View.VISIBLE);
         correct_figure = setRandomFigure();
@@ -373,12 +364,34 @@ public class MemorizeActivity extends AppCompatActivity {
 
         question.setText("Quel est la figure représentée?");
         figure.setImageResource(correct_figure);
-        rep1.setImageResource(correct_figure);
-        rep2.setImageResource(figure2);
-        rep3.setImageResource(figure3);
 
-        switchPosition(rep1, rep2, rep3);
+        timerExpo = new CountDownTimer(5000, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                timer.setText("Memorisez! : " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+
+                ImageView figure = findViewById(R.id.figure);
+                ImageView rep1 = findViewById(R.id.reponse1);
+                ImageView rep2 = findViewById(R.id.reponse2);
+                ImageView rep3 = findViewById(R.id.reponse3);
+
+                figure.setVisibility(View.INVISIBLE);
+                rep1.setImageResource(correct_figure);
+                rep2.setImageResource(figure2);
+                rep3.setImageResource(figure3);
+
+                rep1.setVisibility(View.VISIBLE);
+                rep2.setVisibility(View.VISIBLE);
+                rep3.setVisibility(View.VISIBLE);
+
+                switchPosition(rep1, rep2, rep3);
+                resetTimer();
+            }
+        };
+        timerExpo.start();
     }
 
     /**
@@ -388,11 +401,16 @@ public class MemorizeActivity extends AppCompatActivity {
 
         variante = 2;
 
+        final TextView timer = findViewById(R.id.timer);
         ImageView figure = findViewById(R.id.figure);
         TextView question = findViewById(R.id.question);
         ImageView rep1 = findViewById(R.id.reponse1);
         ImageView rep2 = findViewById(R.id.reponse2);
         ImageView rep3 = findViewById(R.id.reponse3);
+
+        rep1.setVisibility(View.INVISIBLE);
+        rep2.setVisibility(View.INVISIBLE);
+        rep3.setVisibility(View.INVISIBLE);
 
         figure.setVisibility(View.VISIBLE);
         correct_figure = setRandomFigure();
@@ -407,11 +425,34 @@ public class MemorizeActivity extends AppCompatActivity {
 
         question.setText("Quel est la figure représentée?");
         figure.setImageResource(correct_figure);
-        rep1.setImageResource(correct_figure);
-        rep2.setImageResource(figure2);
-        rep3.setImageResource(figure3);
 
-        switchPosition(rep1, rep2, rep3);
+        timerExpo = new CountDownTimer(5000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timer.setText("Memorisez! : " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+
+                ImageView figure = findViewById(R.id.figure);
+                ImageView rep1 = findViewById(R.id.reponse1);
+                ImageView rep2 = findViewById(R.id.reponse2);
+                ImageView rep3 = findViewById(R.id.reponse3);
+
+                figure.setVisibility(View.INVISIBLE);
+                rep1.setImageResource(correct_figure);
+                rep2.setImageResource(figure2);
+                rep3.setImageResource(figure3);
+
+                rep1.setVisibility(View.VISIBLE);
+                rep2.setVisibility(View.VISIBLE);
+                rep3.setVisibility(View.VISIBLE);
+
+                switchPosition(rep1, rep2, rep3);
+                resetTimer();
+            }
+        };
+        timerExpo.start();
 
     }
 
@@ -460,7 +501,6 @@ public class MemorizeActivity extends AppCompatActivity {
         //Création d'un timer
         final TextView timer = findViewById(R.id.timer);
 
-        new_ti.cancel();
         new_ti = new CountDownTimer(maxtime, 1000) {
 
             public void onTick(long millisUntilFinished) {
