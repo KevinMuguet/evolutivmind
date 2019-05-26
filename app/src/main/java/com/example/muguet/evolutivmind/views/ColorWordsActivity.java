@@ -140,8 +140,6 @@ public class ColorWordsActivity extends AppCompatActivity {
                         resetGame();
                     }
                 }, 500);
-
-
             }
 
             @Override
