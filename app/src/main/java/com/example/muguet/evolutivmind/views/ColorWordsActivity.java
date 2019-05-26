@@ -127,12 +127,10 @@ public class ColorWordsActivity extends AppCompatActivity {
             public void onAnimationStart(Animator animation) {
                 new_ti.cancel();
                 Log.d("tick","canceled");
-//                Log.d("debugPerso","start");
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-//                Log.d("debugPerso","end");
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -148,13 +146,11 @@ public class ColorWordsActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-//                Log.d("debugPerso","cancel");
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
                 gameAnimationView.pauseAnimation();
-//                Log.d("debugPerso","repeat");
             }
         });
 
@@ -193,7 +189,6 @@ public class ColorWordsActivity extends AppCompatActivity {
                     if (timerActif == true) {
                         timerExpo.cancel();
                     }
-//                    Toast.makeText(ColorWordsActivity.this, "Correct", Toast.LENGTH_LONG).show();
                     nb_victoire++;
                     if (experienceGagne >= 100) {
                         levelUpAnim.setVisibility(View.VISIBLE);
@@ -208,11 +203,6 @@ public class ColorWordsActivity extends AppCompatActivity {
                         }
                     }
                     Log.d("victoires: ", "" + nb_victoire);
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException ex) {
-//                        android.util.Log.d("Erreur: ", ex.toString());
-//                    }
                     lottieDisplay(gameAnimationView, R.raw.check_orange);
                     Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
@@ -229,14 +219,8 @@ public class ColorWordsActivity extends AppCompatActivity {
                     if (timerActif == true) {
                         timerExpo.cancel();
                     }
-//                    Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                     nb_defaite++;
                     Log.d("defaites: ", "" + nb_defaite);
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException ex) {
-//                        android.util.Log.d("Erreur: ", ex.toString());
-//                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
                     Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
@@ -253,14 +237,8 @@ public class ColorWordsActivity extends AppCompatActivity {
                     if (timerActif == true) {
                         timerExpo.cancel();
                     }
-//                    Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                     nb_defaite++;
                     Log.d("defaites: ", "" + nb_defaite);
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException ex) {
-//                        android.util.Log.d("Erreur: ", ex.toString());
-//                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
                     Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
