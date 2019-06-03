@@ -43,9 +43,6 @@ public class OptionsActivity extends AppCompatActivity {
         timePicker = findViewById(R.id.timePicker);
         btnValidTime = findViewById(R.id.btnValidTime);
 
-        initSlider();
-        setVisibiForHour();
-
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         final SharedPreferences.Editor editor = pref.edit();
 
@@ -103,6 +100,12 @@ public class OptionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setVisibiForHour();
                 sharedpreferences.edit().putBoolean("notificationsPush",notifSwitch.isChecked()).apply();
+                if(notifSwitch.isChecked()) {
+                    initHourOfNotif();
+                    // activer les notifications
+                } else {
+                    // desactiver les notifications
+                }
             }
         });
 
@@ -128,15 +131,35 @@ public class OptionsActivity extends AppCompatActivity {
                     minute = 0;
                 }
                 Log.d("tmeDebug",hour+":"+minute);
+                valHeureNotif.setText(hour+":"+minute);
+                sharedpreferences.edit().putString("hourNotificationsPush",hour+":"+minute).apply();
                 hideAllComponentsGrp2();
                 showAllComponentsGrp1();
             }
         });
+
+        initComponents();
+    }
+
+    public void initComponents() {
+        initSlider();
+        initHourOfNotif();
+        setVisibiForHour();
+
+        timePicker.setIs24HourView(true);
+
+        showAllComponentsGrp1();
+        hideAllComponentsGrp2();
     }
 
     public void initSlider() {
         boolean notifPush = sharedpreferences.getBoolean("notificationsPush", false);
         notifSwitch.setChecked(notifPush);
+    }
+
+    public void initHourOfNotif() {
+        String hourNotifPush = sharedpreferences.getString("hourNotificationsPush", "");
+        valHeureNotif.setText(hourNotifPush);
     }
 
     public void hideAllComponentsGrp1() {
