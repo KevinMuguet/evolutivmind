@@ -1,17 +1,26 @@
 package com.example.muguet.evolutivmind.views;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Statistique;
@@ -23,10 +32,50 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private LottieAnimationView gameAnimationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ImageView fb = findViewById(R.id.fb);
+        ImageView tw = findViewById(R.id.twitter);
+        Animation shake = AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake);
+        shake.setFillAfter(true);
+        fb.startAnimation(shake);
+        tw.startAnimation(shake);
+
+        gameAnimationView = findViewById(R.id.animation_view_game);
+        gameAnimationView.setVisibility(View.VISIBLE);
+        gameAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lottieDisplay(gameAnimationView, R.raw.data);
+                    }
+                }, 500);
+
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                gameAnimationView.pauseAnimation();
+            }
+        });
+        lottieDisplay(gameAnimationView, R.raw.data);
 
         if(isNetworkAvailable()){
             AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
@@ -55,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Button b_play = findViewById(R.id.btnJouer);
+        ImageView b_play = findViewById(R.id.btnJouer);
         b_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Bouton qui permet d'accéder aux paramètres de l'application
-        Button b_options = findViewById(R.id.btnOption);
+        ImageView b_options = findViewById(R.id.btnOption);
         b_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Bouton qui permet d'accéder au profil
-        Button b_profil = findViewById(R.id.btnProfil);
+        ImageView b_profil = findViewById(R.id.btnProfil);
         b_profil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Bouton de déconnexion
-        Button b_quitter = findViewById(R.id.btnQuitter);
+        ImageView b_quitter = findViewById(R.id.btnQuitter);
         b_quitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void lottieDisplay(LottieAnimationView _loLottieAnimationView, int _rawRes) {
+        _loLottieAnimationView.setVisibility(View.VISIBLE);
+        _loLottieAnimationView.setAnimation(_rawRes);
+        _loLottieAnimationView.playAnimation();
     }
 
 }

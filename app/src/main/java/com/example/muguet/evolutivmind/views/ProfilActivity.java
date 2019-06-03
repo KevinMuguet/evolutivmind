@@ -24,7 +24,8 @@ import java.util.List;
 
 public class ProfilActivity extends AppCompatActivity {
 
-    PieChartView pieChartView;
+    PieChartView pieChartView_c;
+    PieChartView pieChartView_m;
     TextView experience;
     TextView niveau;
     TextView username;
@@ -62,20 +63,32 @@ public class ProfilActivity extends AppCompatActivity {
 
         experience.setText(playerExp);
         niveau.setText(playerLevel);
-        Statistique stat = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "ColorWords");
-        int nbVictoire = stat.getVictoires();
-        int nbDefaites = stat.getDefaites();
+        Statistique statC = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "ColorWords");
+        Statistique statM = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "Memorize");
+        int nbVictoireC = statC.getVictoires();
+        int nbDefaitesC = statC.getDefaites();
+        int nbVictoireM = statC.getVictoires();
+        int nbDefaitesM = statC.getDefaites();
 
-        pieChartView = findViewById(R.id.chart);
+        //Colorwords
+        pieChartView_c = findViewById(R.id.chart_colorwords);
+        List pieDataC = new ArrayList<>();
+        pieDataC.add(new SliceValue(nbVictoireC, Color.YELLOW).setLabel(nbVictoireC+"V"));
+        pieDataC.add(new SliceValue(nbDefaitesC, Color.GRAY).setLabel(nbDefaitesC+"D"));
+        PieChartData pieChartDataC = new PieChartData(pieDataC);
+        pieChartDataC.setHasLabels(true).setValueLabelTextSize(14);
+        pieChartDataC.setHasCenterCircle(true);
+        pieChartView_c.setPieChartData(pieChartDataC);
 
-        List pieData = new ArrayList<>();
+        //Memorize
+        pieChartView_m = findViewById(R.id.chart_memorize);
+        List pieDataM = new ArrayList<>();
+        pieDataM.add(new SliceValue(nbVictoireM, Color.YELLOW).setLabel(nbVictoireM+"V"));
+        pieDataM.add(new SliceValue(nbDefaitesM, Color.GRAY).setLabel(nbDefaitesM+"D"));
+        PieChartData pieChartDataM = new PieChartData(pieDataM);
+        pieChartDataM.setHasLabels(true).setValueLabelTextSize(14);
+        pieChartDataM.setHasCenterCircle(true);
+        pieChartView_m.setPieChartData(pieChartDataM);
 
-        pieData.add(new SliceValue(nbVictoire, Color.YELLOW).setLabel(nbVictoire+"V"));
-        pieData.add(new SliceValue(nbDefaites, Color.GRAY).setLabel(nbDefaites+"D"));
-
-        PieChartData pieChartData = new PieChartData(pieData);
-        pieChartData.setHasLabels(true).setValueLabelTextSize(14);
-        pieChartData.setHasCenterCircle(true).setCenterText1("ColorWords").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#130e07"));
-        pieChartView.setPieChartData(pieChartData);
     }
 }

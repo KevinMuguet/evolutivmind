@@ -5,7 +5,7 @@
             android:fromDegrees="0"
             android:pivotX="50%"
             android:pivotY="50%"
-            android:repeatCount="infinite"
+            android:repeatCount="5000"
             android:startOffset="0"
             android:toDegrees="360" />
 </set>

@@ -38,18 +38,18 @@ import java.util.Random;
 
 public class MemorizeActivity extends AppCompatActivity {
 
-/*    private ImageView star;
     private Animation rotation;
-    private ImageView rect;*/
 
     private int nb_victoire = 0;
     private int nb_defaite = 0;
+    private int pos;
 
     private List<String> list;
     private List<Regle> reglesValide;
     private List<Regle> listRegle;
 
     private HashMap<String, Integer> listDrawable = new HashMap<>();
+    private ArrayList<Integer> listFigure = new ArrayList<Integer>();
     private int correct_figure;
     private GifImageView levelUpAnim;
     private LottieAnimationView gameAnimationView;
@@ -66,6 +66,8 @@ public class MemorizeActivity extends AppCompatActivity {
     private long maxtime = 10000;
     private long tempsexposition;
     private int userId;
+
+    private int correct_pos;
 
     //Variables pour stocker les informations des conditions des règles
     private int userIdR;
@@ -84,12 +86,6 @@ public class MemorizeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memorize);
-/*        rect = findViewById(R.id.rectangle);
-        star = findViewById(R.id.star);
-        rotation = AnimationUtils.loadAnimation(MemorizeActivity.this, R.anim.rotate);
-        rotation.setFillAfter(true);
-        star.startAnimation(rotation);
-        rect.startAnimation(rotation);*/
 
         levelUpAnim = findViewById(R.id.levelup);
 
@@ -402,11 +398,11 @@ public class MemorizeActivity extends AppCompatActivity {
         variante = 2;
 
         final TextView timer = findViewById(R.id.timer);
-        ImageView figure = findViewById(R.id.figure);
-        TextView question = findViewById(R.id.question);
-        ImageView rep1 = findViewById(R.id.reponse1);
-        ImageView rep2 = findViewById(R.id.reponse2);
-        ImageView rep3 = findViewById(R.id.reponse3);
+        final ImageView figure = findViewById(R.id.figure);
+        final TextView question = findViewById(R.id.question);
+        final ImageView rep1 = findViewById(R.id.reponse1);
+        final ImageView rep2 = findViewById(R.id.reponse2);
+        final ImageView rep3 = findViewById(R.id.reponse3);
 
         rep1.setVisibility(View.INVISIBLE);
         rep2.setVisibility(View.INVISIBLE);
@@ -423,37 +419,44 @@ public class MemorizeActivity extends AppCompatActivity {
             figure3 = setRandomFigure();
         }
 
-        question.setText("Quel est la figure représentée?");
-        figure.setImageResource(correct_figure);
 
+        for(int i = 0; i < 2; i++){
+            listFigure.add(setRandomFigure());
+        }
+        listFigure.add(correct_figure);
+        Log.d("rfdsdfs",""+listFigure.get(0)+listFigure.get(1)+listFigure.get(2));
+
+        for(int i = 0; i < listFigure.size(); i++) {
+            Random rnd = new Random();
+            pos = rnd.nextInt(listFigure.size());
+            figure.setImageResource(listFigure.get(pos));
+            figure.startAnimation(rotation);
+        }
+
+        /*
         timerExpo = new CountDownTimer(5000, 1000) {
-
             public void onTick(long millisUntilFinished) {
                 timer.setText("Memorisez! : " + millisUntilFinished / 1000);
             }
-
             public void onFinish() {
+                if(listFigure.size() == 0){
+                    question.setText("Quel était la figure à la "+correct_pos+" position?");
+                    figure.setVisibility(View.INVISIBLE);
+                    rep1.setImageResource(correct_figure);
+                    rep2.setImageResource(figure2);
+                    rep3.setImageResource(figure3);
 
-                ImageView figure = findViewById(R.id.figure);
-                ImageView rep1 = findViewById(R.id.reponse1);
-                ImageView rep2 = findViewById(R.id.reponse2);
-                ImageView rep3 = findViewById(R.id.reponse3);
+                    rep1.setVisibility(View.VISIBLE);
+                    rep2.setVisibility(View.VISIBLE);
+                    rep3.setVisibility(View.VISIBLE);
 
-                figure.setVisibility(View.INVISIBLE);
-                rep1.setImageResource(correct_figure);
-                rep2.setImageResource(figure2);
-                rep3.setImageResource(figure3);
-
-                rep1.setVisibility(View.VISIBLE);
-                rep2.setVisibility(View.VISIBLE);
-                rep3.setVisibility(View.VISIBLE);
-
-                switchPosition(rep1, rep2, rep3);
-                resetTimer();
+                    switchPosition(rep1, rep2, rep3);
+                    resetTimer();
+                }
             }
         };
         timerExpo.start();
-
+        */
     }
 
     /**
@@ -467,7 +470,7 @@ public class MemorizeActivity extends AppCompatActivity {
         if(game == 1){
             newGame();
         }else{
-            newGame2();
+            newGame();
         }
     }
 
