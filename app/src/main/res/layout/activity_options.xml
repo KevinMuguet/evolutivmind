@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".views.OptionsActivity"
-        android:background="@drawable/drawable_gradient_animation_list">
+        android:background="@drawable/bggame">
 
     <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_view_options"
