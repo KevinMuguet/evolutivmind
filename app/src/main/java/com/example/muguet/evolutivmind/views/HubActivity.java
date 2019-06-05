@@ -22,8 +22,6 @@ public class HubActivity extends AppCompatActivity {
                 Context.MODE_PRIVATE);
         String loginFromSP = sharedpreferences.getString("login", null);
         if(loginFromSP != null) {
-            Toast.makeText(HubActivity.this, loginFromSP, Toast.LENGTH_LONG).show();
-
             Intent intent = new Intent(getBaseContext(), MainActivity.class);
             startActivity(intent);
             finish();
