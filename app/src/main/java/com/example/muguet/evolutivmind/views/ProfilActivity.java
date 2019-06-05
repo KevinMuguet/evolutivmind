@@ -67,8 +67,8 @@ public class ProfilActivity extends AppCompatActivity {
         Statistique statM = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "Memorize");
         int nbVictoireC = statC.getVictoires();
         int nbDefaitesC = statC.getDefaites();
-        int nbVictoireM = statC.getVictoires();
-        int nbDefaitesM = statC.getDefaites();
+        int nbVictoireM = statM.getVictoires();
+        int nbDefaitesM = statM.getDefaites();
 
         //Colorwords
         pieChartView_c = findViewById(R.id.chart_colorwords);

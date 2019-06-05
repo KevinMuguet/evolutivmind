@@ -5,7 +5,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/mainLayout"
-                android:background="@drawable/form"
+                android:background="@drawable/motif3"
                 tools:context=".MainActivity">
 
     <LinearLayout
@@ -16,18 +16,19 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="344dp">
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_view_game"
+                    android:layout_width="119dp"
+                    android:layout_height="117dp"
+                    android:layout_marginLeft="150dp"
+                    android:layout_marginBottom="125dp"
+                    app:lottie_rawRes="@raw/data" android:layout_gravity="bottom"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="262dp">
 
-            <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/animation_view_game"
-                    android:layout_width="119dp"
-                    android:layout_height="117dp"
-                    android:layout_marginLeft="275dp"
-                    app:lottie_rawRes="@raw/data" android:layout_gravity="bottom"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
@@ -45,18 +46,14 @@
                     android:foregroundGravity="bottom"/>
         </LinearLayout>
     </LinearLayout>
-    <TextView
-            android:id="@+id/textView"
-            android:layout_width="143dp"
-            android:layout_height="64dp"
+    <ImageView
+            android:id="@+id/logo"
+            android:layout_width="188dp"
+            android:layout_height="103dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/annie_use_your_telescope"
             android:gravity="center"
-            android:text="Evolutiv'Mind"
-            android:background="@drawable/cadre1"
-
-            android:textSize="24sp"
+            android:background="@drawable/mainlogo"
             tools:layout_editor_absoluteX="156dp"
             tools:layout_editor_absoluteY="26dp"/>
 

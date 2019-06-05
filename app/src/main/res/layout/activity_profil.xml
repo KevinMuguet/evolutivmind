@@ -97,7 +97,7 @@
                 android:layout_height="164dp">
             <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="match_parent"
+                    android:layout_width="350dp"
                     android:layout_height="match_parent" android:layout_weight="1">
                 <ImageView
                         android:layout_width="75dp"
@@ -105,25 +105,35 @@
                         android:layout_marginLeft="25dp"
                         android:layout_marginTop="70dp"
                         android:layout_height="63dp" app:srcCompat="@drawable/colorwords_b"
-                        android:id="@+id/memorize"/>
-                <View
-                        android:layout_width="1dp"
-                        android:layout_height="118dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="100dp"
-                        android:background="#87CEEB"/>
+                        android:id="@+id/colorwords"/>
             </LinearLayout>
 
             <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="328dp"
+                    android:layout_width="400dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <ImageView
+                        android:layout_width="38dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_height="35dp" app:srcCompat="@drawable/trophee"
+                        android:id="@+id/imageView4"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="410dp"
                     android:layout_height="match_parent" android:layout_weight="1">
                 <lecho.lib.hellocharts.view.PieChartView
                         android:id="@+id/chart_colorwords"
                         android:layout_width="123dp"
                         android:layout_height="96dp"
                         android:layout_marginTop="50dp"/>
+                <View
+                        android:layout_width="1dp"
+                        android:layout_height="118dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="-120dp"
+                        android:background="#87CEEB"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -135,7 +145,7 @@
                 android:layout_height="164dp">
             <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="match_parent"
+                    android:layout_width="350dp"
                     android:layout_height="match_parent" android:layout_weight="1">
                 <ImageView
                         android:layout_width="75dp"
@@ -143,25 +153,35 @@
                         android:layout_marginLeft="25dp"
                         android:layout_marginTop="70dp"
                         android:layout_height="63dp" app:srcCompat="@drawable/memorize_b"
-                        android:id="@+id/colorwords"/>
-                <View
-                        android:layout_width="1dp"
-                        android:layout_height="118dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="100dp"
-                        android:background="#87CEEB"/>
+                        android:id="@+id/memorize"/>
             </LinearLayout>
 
             <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="328dp"
+                    android:layout_width="400dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <ImageView
+                        android:layout_width="38dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_height="35dp" app:srcCompat="@drawable/trophee"
+                        android:id="@+id/imageView5"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="410dp"
                     android:layout_height="match_parent" android:layout_weight="1">
                 <lecho.lib.hellocharts.view.PieChartView
                         android:id="@+id/chart_memorize"
                         android:layout_width="123dp"
                         android:layout_height="96dp"
                         android:layout_marginTop="50dp"/>
+                <View
+                        android:layout_width="1dp"
+                        android:layout_height="118dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="-120dp"
+                        android:background="#87CEEB"/>
             </LinearLayout>
 
         </LinearLayout>
