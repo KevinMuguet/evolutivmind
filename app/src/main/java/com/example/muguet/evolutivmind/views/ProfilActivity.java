@@ -63,32 +63,56 @@ public class ProfilActivity extends AppCompatActivity {
 
         experience.setText(playerExp);
         niveau.setText(playerLevel);
-        Statistique statC = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "ColorWords");
-        Statistique statM = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "Memorize");
-        int nbVictoireC = statC.getVictoires();
-        int nbDefaitesC = statC.getDefaites();
-        int nbVictoireM = statM.getVictoires();
-        int nbDefaitesM = statM.getDefaites();
 
         //Colorwords
-        pieChartView_c = findViewById(R.id.chart_colorwords);
-        List pieDataC = new ArrayList<>();
-        pieDataC.add(new SliceValue(nbVictoireC, Color.YELLOW).setLabel(nbVictoireC+"V"));
-        pieDataC.add(new SliceValue(nbDefaitesC, Color.GRAY).setLabel(nbDefaitesC+"D"));
-        PieChartData pieChartDataC = new PieChartData(pieDataC);
-        pieChartDataC.setHasLabels(true).setValueLabelTextSize(14);
-        pieChartDataC.setHasCenterCircle(true);
-        pieChartView_c.setPieChartData(pieChartDataC);
+        if(db_loc.statistiqueDao().countStatistique(userId, "ColorWords") == 0) {
+            pieChartView_c = findViewById(R.id.chart_colorwords);
+            List pieDataC = new ArrayList<>();
+            pieDataC.add(new SliceValue(0, Color.YELLOW).setLabel(0 + "V"));
+            pieDataC.add(new SliceValue(0, Color.GRAY).setLabel(0 + "D"));
+            PieChartData pieChartDataC = new PieChartData(pieDataC);
+            pieChartDataC.setHasLabels(true).setValueLabelTextSize(14);
+            pieChartDataC.setHasCenterCircle(true);
+            pieChartView_c.setPieChartData(pieChartDataC);
+        }else{
+            Statistique statC = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "ColorWords");
+            int nbVictoireC = statC.getVictoires();
+            int nbDefaitesC = statC.getDefaites();
+            pieChartView_c = findViewById(R.id.chart_colorwords);
+            List pieDataC = new ArrayList<>();
+            pieDataC.add(new SliceValue(nbVictoireC, Color.YELLOW).setLabel(nbVictoireC + "V"));
+            pieDataC.add(new SliceValue(nbDefaitesC, Color.GRAY).setLabel(nbDefaitesC + "D"));
+            PieChartData pieChartDataC = new PieChartData(pieDataC);
+            pieChartDataC.setHasLabels(true).setValueLabelTextSize(14);
+            pieChartDataC.setHasCenterCircle(true);
+            pieChartView_c.setPieChartData(pieChartDataC);
+        }
+
 
         //Memorize
-        pieChartView_m = findViewById(R.id.chart_memorize);
-        List pieDataM = new ArrayList<>();
-        pieDataM.add(new SliceValue(nbVictoireM, Color.YELLOW).setLabel(nbVictoireM+"V"));
-        pieDataM.add(new SliceValue(nbDefaitesM, Color.GRAY).setLabel(nbDefaitesM+"D"));
-        PieChartData pieChartDataM = new PieChartData(pieDataM);
-        pieChartDataM.setHasLabels(true).setValueLabelTextSize(14);
-        pieChartDataM.setHasCenterCircle(true);
-        pieChartView_m.setPieChartData(pieChartDataM);
+        if(db_loc.statistiqueDao().countStatistique(userId, "Memorize") == 0) {
+            pieChartView_m = findViewById(R.id.chart_memorize);
+            List pieDataM = new ArrayList<>();
+            pieDataM.add(new SliceValue(0, Color.YELLOW).setLabel(0 + "V"));
+            pieDataM.add(new SliceValue(0, Color.GRAY).setLabel(0 + "D"));
+            PieChartData pieChartDataM = new PieChartData(pieDataM);
+            pieChartDataM.setHasLabels(true).setValueLabelTextSize(14);
+            pieChartDataM.setHasCenterCircle(true);
+            pieChartView_m.setPieChartData(pieChartDataM);
+        }else{
+            Statistique statM = db_loc.statistiqueDao().findStatistiqueJeuForUser(userId, "Memorize");
+
+            int nbVictoireM = statM.getVictoires();
+            int nbDefaitesM = statM.getDefaites();
+            pieChartView_m = findViewById(R.id.chart_memorize);
+            List pieDataM = new ArrayList<>();
+            pieDataM.add(new SliceValue(nbVictoireM, Color.YELLOW).setLabel(nbVictoireM + "V"));
+            pieDataM.add(new SliceValue(nbDefaitesM, Color.GRAY).setLabel(nbDefaitesM + "D"));
+            PieChartData pieChartDataM = new PieChartData(pieDataM);
+            pieChartDataM.setHasLabels(true).setValueLabelTextSize(14);
+            pieChartDataM.setHasCenterCircle(true);
+            pieChartView_m.setPieChartData(pieChartDataM);
+        }
 
     }
 }

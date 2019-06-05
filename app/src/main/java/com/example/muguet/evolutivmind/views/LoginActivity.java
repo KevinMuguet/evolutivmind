@@ -21,8 +21,6 @@ import com.example.muguet.evolutivmind.models.Profil;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    private ScrollView scrollView;
-    private AnimationDrawable animationDrawable;
 
     @InjectView(R.id.username) EditText _username;
     @InjectView(R.id.age) EditText _age;
@@ -33,20 +31,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
-
-        // init layout
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
-
-        // initializing animation drawable by getting background from constraint layout
-        animationDrawable = (AnimationDrawable) scrollView.getBackground();
-
-        // setting enter fade animation duration to 5 seconds
-        animationDrawable.setEnterFadeDuration(5000);
-
-        // setting exit fade animation duration to 2 seconds
-        animationDrawable.setExitFadeDuration(2000);
-
-        animationDrawable.start();
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -159,24 +143,5 @@ public class LoginActivity extends AppCompatActivity {
          */
 
         return valid;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (animationDrawable != null && !animationDrawable.isRunning()) {
-            // start the animation
-            animationDrawable.start();
-        }
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (animationDrawable != null && animationDrawable.isRunning()) {
-            // stop the animation
-            animationDrawable.stop();
-        }
     }
 }
