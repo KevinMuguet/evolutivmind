@@ -3,33 +3,97 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/drawable_gradient_animation_list">
-
+        android:background="@drawable/motif"
+        android:layout_height="match_parent">
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="10dp"
-            android:orientation="vertical">
-
-        <Button
-                android:id="@+id/button_colorwords"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="710dp">
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:fontFamily="@font/annie_use_your_telescope"
-                android:text="Colorwords" />
-
-        <Button
-                android:id="@+id/button_memorize"
+                android:layout_height="124dp">
+            <ImageView
+                    android:layout_width="430dp"
+                    android:layout_height="97dp" app:srcCompat="@drawable/choix" android:id="@+id/imageView"
+                    android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+                android:background="@drawable/cadre"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:fontFamily="@font/annie_use_your_telescope"
-                android:text="Memorize" />
+                android:layout_height="83dp">
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <TextView
+                        android:text="Mémorisez les couleurs!"
+                        android:fontFamily="@font/annie_use_your_telescope"
+                        android:textSize="20dp"
+                        android:layout_width="171dp"
+                        android:layout_marginLeft="67dp"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" android:id="@+id/textView5" android:layout_weight="1"
+                        android:gravity="center"/>
+                <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="#87CEEB"/>
+            </LinearLayout>
 
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="328dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <ImageView
+                        android:layout_width="133dp"
+                        android:layout_marginRight="40dp"
+                        android:layout_height="wrap_content" app:srcCompat="@drawable/colorwords_b"
+                        android:id="@+id/colorwords" android:layout_weight="1"/>
+            </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+                android:background="@drawable/cadre"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="83dp">
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <TextView
+                        android:text="Mémorisez les formes!"
+                        android:fontFamily="@font/annie_use_your_telescope"
+                        android:textSize="20dp"
+                        android:layout_width="171dp"
+                        android:layout_marginLeft="67dp"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" android:id="@+id/textView6" android:layout_weight="1"
+                        android:gravity="center"/>
+                <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="#87CEEB"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="328dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <ImageView
+                        android:layout_marginRight="40dp"
+                        android:layout_width="133dp"
+                        android:layout_height="wrap_content" app:srcCompat="@drawable/memorize_b"
+                        android:id="@+id/memorize" android:layout_weight="1"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>
