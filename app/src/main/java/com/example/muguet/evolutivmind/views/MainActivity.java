@@ -1,21 +1,15 @@
 package com.example.muguet.evolutivmind.views;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -33,8 +27,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private LottieAnimationView gameAnimationView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,37 +38,6 @@ public class MainActivity extends AppCompatActivity {
         shake.setFillAfter(true);
         fb.startAnimation(shake);
         tw.startAnimation(shake);
-
-        gameAnimationView = findViewById(R.id.animation_view_game);
-        gameAnimationView.setVisibility(View.VISIBLE);
-        gameAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        lottieDisplay(gameAnimationView, R.raw.data);
-                    }
-                }, 500);
-
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-                gameAnimationView.pauseAnimation();
-            }
-        });
-        lottieDisplay(gameAnimationView, R.raw.data);
 
         if(isNetworkAvailable()){
             AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
@@ -152,8 +113,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Bouton FB
-        ImageView b_fb = findViewById(R.id.fb);
-        b_fb.setOnClickListener(new View.OnClickListener() {
+        fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("http://www.facebook.com/");
@@ -163,8 +123,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Bouton Twitter
-        ImageView b_twitter = findViewById(R.id.twitter);
-        b_twitter.setOnClickListener(new View.OnClickListener() {
+        tw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("http://www.twitter.com/");

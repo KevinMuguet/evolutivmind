@@ -15,25 +15,17 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="344dp">
-            <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/animation_view_game"
-                    android:layout_width="119dp"
-                    android:layout_height="117dp"
-                    android:layout_marginLeft="150dp"
-                    android:layout_marginBottom="125dp"
-                    app:lottie_rawRes="@raw/data" android:layout_gravity="bottom"/>
-        </LinearLayout>
+                android:layout_height="164dp"/>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="262dp">
+                android:layout_height="385dp">
 
         </LinearLayout>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="188dp" android:gravity="right">
+                android:layout_height="179dp" android:gravity="right">
             <ImageView
                     android:src="@drawable/fb"
                     android:layout_width="62dp"
