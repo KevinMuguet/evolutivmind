@@ -1,30 +1,29 @@
 package com.example.muguet.evolutivmind.views;
 
 import android.animation.Animator;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.R;
-import android.util.Log;
+
+import java.util.Calendar;
 
 public class OptionsActivity extends AppCompatActivity {
 
     Button retour;
     Switch notifSwitch;
     TextView heureNotif;
-    EditText valHeureNotif;
+    TextView valHeureNotif;
     SharedPreferences sharedpreferences;
-    InputMethodManager imm;
-    TimePicker timePicker;
     Button btnLogout;
-    Button btnValidTime;
     LottieAnimationView lottieAnimationView;
+    Button btnModifHeure;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +33,30 @@ public class OptionsActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences("MyPref",
                 Context.MODE_PRIVATE);
 
-        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-
         btnLogout = findViewById(R.id.btn_logout);
         notifSwitch = findViewById(R.id.notifPush);
         heureNotif = findViewById(R.id.textHeure);
-        valHeureNotif = findViewById(R.id.editTime);
-        timePicker = findViewById(R.id.timePicker);
-        btnValidTime = findViewById(R.id.btnValidTime);
+        valHeureNotif = findViewById(R.id.textTime);
+        btnModifHeure = findViewById(R.id.btnModifHeure);
+
+        btnModifHeure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(OptionsActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        valHeureNotif.setText( selectedHour + ":" + selectedMinute);
+                        sharedpreferences.edit().putString("hourNotificationsPush",selectedHour + ":" + selectedMinute).apply();
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         final SharedPreferences.Editor editor = pref.edit();
@@ -109,35 +124,6 @@ public class OptionsActivity extends AppCompatActivity {
             }
         });
 
-        valHeureNotif.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideAllComponentsGrp1();
-                showAllComponentsGrp2();
-                imm.hideSoftInputFromWindow(valHeureNotif.getWindowToken(), 0);
-            }
-        });
-
-        btnValidTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int hour;
-                int minute;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    hour = timePicker.getHour();
-                    minute = timePicker.getMinute();
-                } else {
-                    hour = 0;
-                    minute = 0;
-                }
-                Log.d("tmeDebug",hour+":"+minute);
-                valHeureNotif.setText(hour+":"+minute);
-                sharedpreferences.edit().putString("hourNotificationsPush",hour+":"+minute).apply();
-                hideAllComponentsGrp2();
-                showAllComponentsGrp1();
-            }
-        });
-
         initComponents();
     }
 
@@ -145,11 +131,6 @@ public class OptionsActivity extends AppCompatActivity {
         initSlider();
         initHourOfNotif();
         setVisibiForHour();
-
-        timePicker.setIs24HourView(true);
-
-        showAllComponentsGrp1();
-        hideAllComponentsGrp2();
     }
 
     public void initSlider() {
@@ -162,41 +143,15 @@ public class OptionsActivity extends AppCompatActivity {
         valHeureNotif.setText(hourNotifPush);
     }
 
-    public void hideAllComponentsGrp1() {
-        retour.setVisibility(View.INVISIBLE);
-        notifSwitch.setVisibility(View.INVISIBLE);
-        heureNotif.setVisibility(View.INVISIBLE);
-        valHeureNotif.setVisibility(View.INVISIBLE);
-        btnLogout.setVisibility(View.INVISIBLE);
-        lottieAnimationView.setVisibility(View.INVISIBLE);
-    }
-
-    public void hideAllComponentsGrp2() {
-        btnValidTime.setVisibility(View.INVISIBLE);
-        timePicker.setVisibility(View.INVISIBLE);
-
-    }
-
-    public void showAllComponentsGrp1() {
-        retour.setVisibility(View.VISIBLE);
-        notifSwitch.setVisibility(View.VISIBLE);
-        setVisibiForHour();
-        btnLogout.setVisibility(View.VISIBLE);
-        lottieAnimationView.setVisibility(View.VISIBLE);
-    }
-
-    public void showAllComponentsGrp2() {
-        btnValidTime.setVisibility(View.VISIBLE);
-        timePicker.setVisibility(View.VISIBLE);
-    }
-
     public void setVisibiForHour() {
         if(notifSwitch.isChecked()) {
             heureNotif.setVisibility(View.VISIBLE);
             valHeureNotif.setVisibility(View.VISIBLE);
+            btnModifHeure.setVisibility(View.VISIBLE);
         } else {
             heureNotif.setVisibility(View.INVISIBLE);
             valHeureNotif.setVisibility(View.INVISIBLE);
+            btnModifHeure.setVisibility(View.INVISIBLE);
         }
     }
 }
