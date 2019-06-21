@@ -1,13 +1,18 @@
 package com.example.muguet.evolutivmind.views;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.room.Room;
@@ -21,6 +26,8 @@ import lecho.lib.hellocharts.view.PieChartView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.View.GONE;
 
 public class ProfilActivity extends AppCompatActivity {
 
@@ -114,5 +121,69 @@ public class ProfilActivity extends AppCompatActivity {
             pieChartView_m.setPieChartData(pieChartDataM);
         }
 
+        tropheeColorwords(db_loc, userId);
+        tropheeMemorize(db_loc,userId);
+    }
+
+    private void tropheeColorwords(AppDatabase db, int user){
+
+        ImageView trophee = findViewById(R.id.tropheeColorWords);
+        trophee.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+
+                final CharSequence[] items = {"1ère partie ColorWords"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfilActivity.this);
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                    }
+                });
+                AlertDialog alert = builder.create();
+
+                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
+                    alert.show();
+                }else{
+                    alert.cancel();
+                }
+                return true;
+            }
+        });
+
+        if(db.statistiqueDao().countStatistique(user, "ColorWords") == 0) {
+            trophee.setVisibility(View.GONE);
+        }else{
+            trophee.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void tropheeMemorize(AppDatabase db, int user){
+
+        ImageView trophee = findViewById(R.id.tropheeMemorize);
+        trophee.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+
+                final CharSequence[] items = {"1ère partie Memorize"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfilActivity.this);
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                    }
+                });
+                AlertDialog alert = builder.create();
+
+                if (arg1.getAction()==MotionEvent.ACTION_DOWN) {
+                    alert.show();
+                }else{
+                    alert.cancel();
+                }
+                return true;
+            }
+        });
+
+        if(db.statistiqueDao().countStatistique(user, "Memorize") == 0) {
+            trophee.setVisibility(View.GONE);
+        }else{
+            trophee.setVisibility(View.VISIBLE);
+        }
     }
 }

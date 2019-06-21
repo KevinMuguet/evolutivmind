@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.icu.util.TimeUnit;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
@@ -24,7 +23,6 @@ import com.example.muguet.evolutivmind.ia.AlgoGen;
 import com.example.muguet.evolutivmind.ia.Regle;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Profil;
-import com.example.muguet.evolutivmind.models.Session;
 import com.example.muguet.evolutivmind.models.Statistique;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -41,6 +39,7 @@ public class ColorWordsActivity extends AppCompatActivity {
     private List<String> list;
     private List<Regle> reglesValide;
     private List<Regle> listRegle;
+    private String regleJoue;
 
     private HashMap<String, Integer> listColor = new HashMap<>();
     private int correct_color;
@@ -77,6 +76,7 @@ public class ColorWordsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colorwords);
+        TextView regleText = findViewById(R.id.regle);
 
         levelUpAnim = findViewById(R.id.levelup);
 
@@ -178,6 +178,7 @@ public class ColorWordsActivity extends AppCompatActivity {
     private void verif(final ImageView rect, final ImageView rect2, final ImageView rect3){
 
         final LottieAnimationView gameAnimationView = findViewById(R.id.animation_view_game);
+        final TextView regleText = findViewById(R.id.regle);
 
         (rect).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,7 +283,7 @@ public class ColorWordsActivity extends AppCompatActivity {
         float posXimg3 = rect3.getX();
         float posYimg3 = rect3.getY();
 
-        int nb = new Random().nextInt(5);
+        int nb = new Random().nextInt(6);
 
         switch (nb){
             case 1:
@@ -466,7 +467,7 @@ public class ColorWordsActivity extends AppCompatActivity {
 
     private void reduireTempsExposition(){
 
-        tempsexposition = 2000;
+        tempsexposition = 5000;
         timerActif = true;
         timerExpo = new CountDownTimer(tempsexposition, 1000) {
 
@@ -482,17 +483,44 @@ public class ColorWordsActivity extends AppCompatActivity {
         timerExpo.start();
     }
 
-    private void jouerRegle(Regle regle){
+    private void jouerRegle(final Regle regle){
+
+        final Handler handler = new Handler();
+        final TextView regleText = findViewById(R.id.regle);
 
         switch(regle.getAction()){
             case "Augmentation du temps consacré au timer":
                 changeTimer(true);
+                regleJoue = "Timer augmenté!";
+                regleText.setText(regleJoue);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        regleText.setText("");
+                    }
+                }, 1000);
                 break;
             case "Diminution du temps consacré au timer":
                 changeTimer(false);
+                regleJoue = "Timer diminué!";
+                regleText.setText(regleJoue);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        regleText.setText("");
+                    }
+                }, 1000);
                 break;
             case "Réduire le temps d'exposition du mot":
                 reduireTempsExposition();
+                regleJoue = "Temps d'exposition du mot diminué!";
+                regleText.setText(regleJoue);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        regleText.setText("");
+                    }
+                }, 1000);
                 break;
             default:
                 break;
@@ -506,14 +534,33 @@ public class ColorWordsActivity extends AppCompatActivity {
 
         Regle regle = new Regle(userId,
                 1,
-                timeleft,
+                (int)timeleft,
                 variante,
                 resPartiePrecedente,
                 5,
-                randomAction());
+                "Augmentation du temps consacré au timer");
 
-        Log.d("Regle cree: ",""+userId+"/1/"+timeleft+"/"+variante+"/"+resPartiePrecedente);
+        Regle regle2 = new Regle(userId,
+                1,
+                (int)timeleft,
+                variante,
+                resPartiePrecedente,
+                5,
+                "Diminution du temps consacré au timer");
+
+        Regle regle3 = new Regle(userId,
+                1,
+                (int)timeleft,
+                variante,
+                resPartiePrecedente,
+                5,
+                "Réduire le temps d'exposition du mot");
+
+
+        db_loc.regleDao().insert(AlgoGen.mutationRegle(regle));
         db_loc.regleDao().insert(regle);
+        db_loc.regleDao().insert(regle2);
+        db_loc.regleDao().insert(regle3);
     }
 
     private void verificationRegle(){

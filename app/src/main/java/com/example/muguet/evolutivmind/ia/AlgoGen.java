@@ -7,7 +7,7 @@ public class AlgoGen {
     public static String mutationAction(String action){
         String newAction = "";
         Random random = new Random();
-        int res = random.nextInt(3);
+        int res = random.nextInt(4);
         if(res == 0){
             newAction = "Augmentation du temps consacré au timer";
         }
@@ -25,22 +25,18 @@ public class AlgoGen {
 
     public static Regle mutationRegle(Regle regle){
         Random random = new Random();
-        int res = random.nextInt(4);
-        if(res == 0){ //userId
+        int res = random.nextInt(3);
+        if (res == 0){ //tempsRestant
+            regle.setTimeRestant(random.nextInt(10));
         }
-        if (res == 1){ //idJeu
-        }
-        if (res == 2){ //tempsRestant
-
-        }
-        if (res == 3){ //varianteJeu
+        if (res == 1){ //varianteJeu
             if(regle.getVarianteJeu() == 1){
                 regle.setVarianteJeu(2);
             }else{
                 regle.setVarianteJeu(1);
             }
         }
-        if (res == 4){ //resPartiePrecedente
+        if (res == 2){ //resPartiePrecedente
             if(regle.isResPartiePrecedente()) {
                 regle.setResPartiePrecedente(false);
             }else{

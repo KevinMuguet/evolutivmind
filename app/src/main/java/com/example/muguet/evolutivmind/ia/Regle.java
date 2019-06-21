@@ -31,7 +31,7 @@ public class Regle {
         return timeRestant;
     }
 
-    public void setTimeRestant(float timeRestant) {
+    public void setTimeRestant(int timeRestant) {
         this.timeRestant = timeRestant;
     }
 
@@ -64,7 +64,7 @@ public class Regle {
     }
 
     public int idJeu;    // L'id unique du jeu qui va permettre d'identifier les jeux disponibles dans l'application
-    public float timeRestant; // Le temps restant au jeu avant la fin de la partie
+    public int timeRestant; // Le temps restant au jeu avant la fin de la partie
     public int varianteJeu;
     public boolean resPartiePrecedente; // Victoire ou Défaite du joueur sur la partie précédente afin de réguler au mieux
     public int poids; // Cet attribut permet de mesurer la pertinence de l'association action et situation
@@ -75,7 +75,7 @@ public class Regle {
 
     private String action; // La conséquence de l'action faite par l'utilisateur
 
-    public Regle(int idJoueur, int idJeu, float timeRestant, int varianteJeu, boolean resPartiePrecedente, int poids, String action){
+    public Regle(int idJoueur, int idJeu, int timeRestant, int varianteJeu, boolean resPartiePrecedente, int poids, String action){
         this.idJoueur = idJoueur;
         this.idJeu = idJeu;
         this.timeRestant = timeRestant;

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.room.Room;
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.muguet.evolutivmind.ia.AlgoGen;
 import com.example.muguet.evolutivmind.ia.Regle;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Profil;
@@ -47,6 +48,7 @@ public class MemorizeActivity extends AppCompatActivity {
     private List<String> list;
     private List<Regle> reglesValide;
     private List<Regle> listRegle;
+    private String regleJoue;
 
     private HashMap<String, Integer> listDrawable = new HashMap<>();
     private ArrayList<Integer> listFigure = new ArrayList<Integer>();
@@ -55,16 +57,18 @@ public class MemorizeActivity extends AppCompatActivity {
     private LottieAnimationView gameAnimationView;
     private int figure2;
     private int figure3;
+    private boolean timerExpoActif = true;
 
     private int variante;
     private boolean resPartiePrecedente;
     private long timeleft;
+    private long timeExpoLeft;
 
     private boolean timerActif;
     private int experienceGagne = 0;
     private int levelUp = 0;
     private long maxtime = 10000;
-    private long tempsexposition;
+    private long tempsexposition = 5000;
     private int userId;
 
     private int correct_pos;
@@ -205,7 +209,7 @@ public class MemorizeActivity extends AppCompatActivity {
 //                    }
                     lottieDisplay(gameAnimationView, R.raw.check_orange);
                     Log.d("lottie", "lottieDisplayed");
-                    //verificationRegle();
+                    verificationRegle();
                     resPartiePrecedente = true;
                 }
             }
@@ -229,7 +233,7 @@ public class MemorizeActivity extends AppCompatActivity {
 //                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
                     Log.d("lottie", "lottieDisplayed");
-                    //verificationRegle();
+                    verificationRegle();
                     resPartiePrecedente = false;
                 }
             }
@@ -253,7 +257,7 @@ public class MemorizeActivity extends AppCompatActivity {
 //                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
                     Log.d("lottie", "lottieDisplayed");
-                    //verificationRegle();
+                    verificationRegle();
                     resPartiePrecedente = false;
                 }
             }
@@ -287,7 +291,7 @@ public class MemorizeActivity extends AppCompatActivity {
         float posXimg3 = rep3.getX();
         float posYimg3 = rep3.getY();
 
-        int nb = new Random().nextInt(5);
+        int nb = new Random().nextInt(6);
 
         switch (nb){
             case 1:
@@ -361,13 +365,17 @@ public class MemorizeActivity extends AppCompatActivity {
         question.setText("Quel est la figure représentée?");
         figure.setImageResource(correct_figure);
 
-        timerExpo = new CountDownTimer(5000, 1000) {
+        timerExpo = new CountDownTimer(tempsexposition, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("Memorisez! : " + millisUntilFinished / 1000);
+                timerExpoActif = true;
+                timeExpoLeft = millisUntilFinished/1000;
             }
 
             public void onFinish() {
+
+                timerExpoActif = false;
 
                 ImageView figure = findViewById(R.id.figure);
                 ImageView rep1 = findViewById(R.id.reponse1);
@@ -475,29 +483,12 @@ public class MemorizeActivity extends AppCompatActivity {
     }
 
     private void changeTimer(boolean increase){
-        //Création d'un timer
-        final TextView timer = findViewById(R.id.timer);
-
         new_ti.cancel();
         if(increase == true) {
             maxtime += 1000;
         }else{
             maxtime = maxtime - 1000;
         }
-
-        new_ti = new CountDownTimer(maxtime, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                timer.setText("Temps restant: " + millisUntilFinished / 1000);
-                timeleft = millisUntilFinished/1000;
-            }
-
-            public void onFinish() {
-                nb_defaite++;
-                lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
-            }
-        };
-        new_ti.start();
     }
 
     private void resetTimer(){
@@ -521,33 +512,47 @@ public class MemorizeActivity extends AppCompatActivity {
 
     private void reduireTempsExposition(){
 
-        tempsexposition = 2000;
-        timerActif = true;
-        timerExpo = new CountDownTimer(tempsexposition, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-            }
-
-            public void onFinish() {
-                TextView mot = findViewById(R.id.mot);
-                mot.setVisibility(View.GONE);
-                timerActif = false;
-            }
-        };
-        timerExpo.start();
+        tempsexposition = tempsexposition - 1000;
     }
 
     private void jouerRegle(Regle regle){
 
+        final Handler handler = new Handler();
+        final TextView regleText = findViewById(R.id.regle);
+
         switch(regle.getAction()){
             case "Augmentation du temps consacré au timer":
                 changeTimer(true);
+                regleJoue = "Timer augmenté!";
+                regleText.setText(regleJoue);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        regleText.setText("");
+                    }
+                }, 1000);
                 break;
             case "Diminution du temps consacré au timer":
                 changeTimer(false);
+                regleJoue = "Timer diminué!";
+                regleText.setText(regleJoue);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        regleText.setText("");
+                    }
+                }, 1000);
                 break;
-            case "Réduire le temps d'exposition du mot":
+            case "Réduire le temps d'exposition de la forme":
                 reduireTempsExposition();
+                regleJoue = "Temps d'exposition de la forme diminué!";
+                regleText.setText(regleJoue);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        regleText.setText("");
+                    }
+                }, 1000);
                 break;
             default:
                 break;
@@ -561,14 +566,30 @@ public class MemorizeActivity extends AppCompatActivity {
 
         Regle regle = new Regle(userId,
                 2,
-                timeleft,
+                (int)timeleft,
                 variante,
                 resPartiePrecedente,
                 5,
-                randomAction());
+                "Augmentation du temps consacré au timer");
+        Regle regle2 = new Regle(userId,
+                2,
+                (int)timeleft,
+                variante,
+                resPartiePrecedente,
+                5,
+                "Diminution du temps consacré au timer");
+        Regle regle3 = new Regle(userId,
+                2,
+                (int)timeleft,
+                variante,
+                resPartiePrecedente,
+                5,
+                "Réduire le temps d'exposition de la forme");
 
-        Log.d("Regle cree: ",""+userId+"/2/"+timeleft+"/"+variante+"/"+resPartiePrecedente);
+        db_loc.regleDao().insert(AlgoGen.mutationRegle(regle));
         db_loc.regleDao().insert(regle);
+        db_loc.regleDao().insert(regle2);
+        db_loc.regleDao().insert(regle3);
     }
 
     private void verificationRegle(){
@@ -629,7 +650,7 @@ public class MemorizeActivity extends AppCompatActivity {
             action = "Diminution du temps consacré au timer";
         }
         if (res == 2){
-            action = "Réduire le temps d'exposition du mot";
+            action = "Réduire le temps d'exposition de la forme";
         }
         return action;
     }
@@ -638,7 +659,11 @@ public class MemorizeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         final TextView timer = findViewById(R.id.timer);
-        new_ti.cancel();
+        if(timerExpoActif == false) {
+            new_ti.cancel();
+        }else{
+            timerExpo.cancel();
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Quitter le jeu?")
@@ -673,19 +698,23 @@ public class MemorizeActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Non", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        new_ti = new CountDownTimer(timeleft*1000+1000, 1000) {
+                        if(timerExpoActif == false) {
+                            new_ti = new CountDownTimer(timeleft * 1000 + 1000, 1000) {
 
-                            public void onTick(long millisUntilFinished) {
-                                timer.setText("Temps restant: " + millisUntilFinished / 1000);
-                                timeleft = millisUntilFinished / 1000;
-                            }
+                                public void onTick(long millisUntilFinished) {
+                                    timer.setText("Temps restant: " + millisUntilFinished / 1000);
+                                    timeleft = millisUntilFinished / 1000;
+                                }
 
-                            public void onFinish() {
-                                nb_defaite++;
-                                lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
-                            }
-                        };
-                        new_ti.start();
+                                public void onFinish() {
+                                    nb_defaite++;
+                                    lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
+                                }
+                            };
+                            new_ti.start();
+                        }else{
+                            newGame();
+                        }
                         dialog.cancel();
                     }
                 });
