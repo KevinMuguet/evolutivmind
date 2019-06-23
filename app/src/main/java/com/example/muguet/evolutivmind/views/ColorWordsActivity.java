@@ -57,8 +57,8 @@ public class ColorWordsActivity extends AppCompatActivity {
     private long timeleft;
 
     private boolean timerActif;
-    private int experienceGagne = 0;
-    private int levelUp = 0;
+    private int userLevel;
+    private int userExp;
     private long maxtime = 10000;
     private long tempsexposition;
     private int userId;
@@ -92,6 +92,9 @@ public class ColorWordsActivity extends AppCompatActivity {
         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
         userId = db_loc.profilDao().getProfil(loginFromSP).getId();
+
+        userExp = db_loc.profilDao().getProfilById(userId).getExperience();
+        userLevel = db_loc.profilDao().getProfilById(userId).getNiveau();
 
         ImageView rect = findViewById(R.id.rectangle);
         ImageView rect2 = findViewById(R.id.rectangle2);
@@ -221,16 +224,16 @@ public class ColorWordsActivity extends AppCompatActivity {
                         timerExpo.cancel();
                     }
                     nb_victoire++;
-                    if (experienceGagne >= 100) {
+                    if (userExp >= 100) {
                         levelUpAnim.setVisibility(View.VISIBLE);
                         levelUpAnim.setBackgroundResource(R.drawable.levelup);
-                        experienceGagne = 0;
-                        levelUp += 1;
+                        userExp = 0;
+                        userLevel += 1;
                     } else {
                         if (variante == 1) {
-                            experienceGagne += 10;
+                            userExp += 10;
                         } else {
-                            experienceGagne += 20;
+                            userExp += 20;
                         }
                     }
                     if(regleJouee == true){
@@ -680,8 +683,8 @@ public class ColorWordsActivity extends AppCompatActivity {
                         }
                         //On met à jour le profil du joueur
                         Profil joueur = db_loc.profilDao().getProfilById(userId);
-                        joueur.setExperience(joueur.getExperience()+experienceGagne);
-                        joueur.setNiveau(joueur.getNiveau()+levelUp);
+                        joueur.setExperience(userExp);
+                        joueur.setNiveau(userLevel);
                         db_loc.profilDao().update(joueur);
                         ColorWordsActivity.this.finish();
                     }

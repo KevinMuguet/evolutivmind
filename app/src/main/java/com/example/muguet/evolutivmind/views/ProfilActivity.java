@@ -36,7 +36,7 @@ public class ProfilActivity extends AppCompatActivity {
     TextView experience;
     TextView niveau;
     TextView username;
-    Button retour;
+    ImageView retour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

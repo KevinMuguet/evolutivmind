@@ -18,9 +18,9 @@
                     android:orientation="horizontal"
                     android:layout_width="114dp"
                     android:layout_height="match_parent">
-                <Button
-                        android:text="Retour"
-                        android:layout_width="83dp"
+                <ImageView
+                        android:background="@drawable/retour"
+                        android:layout_width="69dp"
                         android:layout_height="38dp"
                         android:id="@+id/retour"
                         android:layout_gravity="top|left"/>
