@@ -1,163 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:background="@drawable/motif"
         android:layout_height="match_parent">
-    <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/niveau"
-            app:layout_constraintStart_toEndOf="@+id/niveauTitle" app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/niveauTitle"
-            app:layout_constraintBottom_toBottomOf="@+id/niveauTitle"/>
-    <TextView
-            android:text="0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/experience"
-            app:layout_constraintStart_toEndOf="@+id/experienceTitle" app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/experienceTitle"
-            app:layout_constraintBottom_toBottomOf="@+id/experienceTitle"/>
-    <TextView
-            android:text="Experience :"
-            android:fontFamily="@font/annie_use_your_telescope"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/experienceTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/experience"
-            app:layout_constraintTop_toBottomOf="@+id/username" app:layout_constraintBottom_toTopOf="@+id/niveauTitle"/>
-    <TextView
-            android:text="Niveau :"
-            android:fontFamily="@font/annie_use_your_telescope"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/niveauTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/niveau"
-            app:layout_constraintTop_toBottomOf="@+id/experienceTitle"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"/>
-    <TextView
-            android:text="TextView"
-            android:fontFamily="@font/annie_use_your_telescope"
-            android:layout_width="169dp"
-            android:layout_height="32dp" android:id="@+id/username"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/experienceTitle" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
-    <Button
-            android:text="Retour"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/retour"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="5dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="5dp"/>
     <LinearLayout
-            android:background="@drawable/cadre"
-            android:orientation="horizontal"
-            android:layout_width="395dp"
-            android:layout_height="164dp"
-            android:id="@+id/linearLayout"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="710dp">
         <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="350dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-            <ImageView
-                    android:layout_width="75dp"
-                    android:layout_marginRight="40dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="70dp"
-                    android:layout_height="63dp" app:srcCompat="@drawable/memorize_b"
-                    android:id="@+id/memorize"/>
+                android:layout_width="match_parent"
+                android:layout_height="124dp">
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="114dp"
+                    android:layout_height="match_parent">
+                <ImageView
+                        android:background="@drawable/retour"
+                        android:layout_width="83dp"
+                        android:layout_height="38dp"
+                        android:id="@+id/retour"
+                        android:layout_gravity="top|left"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="202dp"
+                    android:layout_height="match_parent">
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp">
+                    <TextView
+                            android:text="TextView"
+                            android:fontFamily="@font/annie_use_your_telescope"
+                            android:layout_width="169dp"
+                            android:layout_height="32dp" android:id="@+id/username"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            tools:text="syvan" android:layout_gravity="center|top" android:gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="108dp"
+                            android:layout_height="match_parent">
+                        <TextView
+                                android:text="Niveau :"
+                                android:fontFamily="@font/annie_use_your_telescope"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/niveauTitle"
+                                android:layout_marginTop="20dp"
+                                app:layout_constraintEnd_toStartOf="@+id/niveau"
+                                android:layout_gravity="center"/>
+                        <TextView
+                                android:text="Experience :"
+                                android:fontFamily="@font/annie_use_your_telescope"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/experienceTitle"
+                                app:layout_constraintEnd_toStartOf="@+id/niveau"
+                                android:layout_gravity="center"/>
+                    </LinearLayout>
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        <TextView
+                                android:text="TextView"
+                                android:layout_marginTop="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/niveau"/>
+                        <TextView
+                                android:text="0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:id="@+id/experience"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+                android:background="@drawable/cadre"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="164dp">
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <ImageView
+                        android:layout_width="75dp"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="70dp"
+                        android:layout_height="63dp" app:srcCompat="@drawable/colorwords_b"
+                        android:id="@+id/colorwords"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="400dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <ImageView
+                        android:layout_width="38dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_height="35dp" app:srcCompat="@drawable/trophee"
+                        android:id="@+id/tropheeColorWords"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="410dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <lecho.lib.hellocharts.view.PieChartView
+                        android:id="@+id/chart_colorwords"
+                        android:layout_width="123dp"
+                        android:layout_height="96dp"
+                        android:layout_marginTop="50dp"/>
+                <View
+                        android:layout_width="1dp"
+                        android:layout_height="118dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="-120dp"
+                        android:background="#87CEEB"/>
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
+                android:background="@drawable/cadre"
                 android:orientation="horizontal"
-                android:layout_width="400dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-            <ImageView
-                    android:layout_width="38dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_height="35dp" app:srcCompat="@drawable/trophee"
-                    android:id="@+id/tropheeMemorize"/>
-        </LinearLayout>
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="410dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-            <lecho.lib.hellocharts.view.PieChartView
-                    android:id="@+id/chart_memorize"
-                    android:layout_width="123dp"
-                    android:layout_height="96dp"
-                    android:layout_marginTop="50dp"/>
-            <View
-                    android:layout_width="1dp"
-                    android:layout_height="118dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="-120dp"
-                    android:background="#87CEEB"/>
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="164dp">
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <ImageView
+                        android:layout_width="75dp"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="70dp"
+                        android:layout_height="63dp" app:srcCompat="@drawable/memorize_b"
+                        android:id="@+id/memorize"/>
+            </LinearLayout>
 
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="400dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <ImageView
+                        android:layout_width="38dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_height="35dp" app:srcCompat="@drawable/trophee"
+                        android:id="@+id/tropheeMemorize"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="410dp"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                <lecho.lib.hellocharts.view.PieChartView
+                        android:id="@+id/chart_memorize"
+                        android:layout_width="123dp"
+                        android:layout_height="96dp"
+                        android:layout_marginTop="50dp"/>
+                <View
+                        android:layout_width="1dp"
+                        android:layout_height="118dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="-120dp"
+                        android:background="#87CEEB"/>
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-            android:background="@drawable/cadre"
-            android:orientation="horizontal"
-            android:layout_width="395dp"
-            android:layout_height="164dp"
-            android:id="@+id/linearLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/niveauTitle"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent">
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="350dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-            <ImageView
-                    android:layout_width="75dp"
-                    android:layout_marginRight="40dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="70dp"
-                    android:layout_height="63dp" app:srcCompat="@drawable/colorwords_b"
-                    android:id="@+id/colorwords"/>
-        </LinearLayout>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="400dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-            <ImageView
-                    android:layout_width="38dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_height="35dp" app:srcCompat="@drawable/trophee"
-                    android:id="@+id/tropheeColorWords"/>
-        </LinearLayout>
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="410dp"
-                android:layout_height="match_parent" android:layout_weight="1">
-            <lecho.lib.hellocharts.view.PieChartView
-                    android:id="@+id/chart_colorwords"
-                    android:layout_width="123dp"
-                    android:layout_height="96dp"
-                    android:layout_marginTop="50dp"/>
-            <View
-                    android:layout_width="1dp"
-                    android:layout_height="118dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="-120dp"
-                    android:background="#87CEEB"/>
-        </LinearLayout>
-
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

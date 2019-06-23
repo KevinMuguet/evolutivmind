@@ -20,14 +20,14 @@ import java.util.Calendar;
 
 public class OptionsActivity extends AppCompatActivity {
 
-    Button retour;
+    ImageView retour;
     Switch notifSwitch;
     TextView heureNotif;
     TextView valHeureNotif;
     SharedPreferences sharedpreferences;
-    Button btnLogout;
+    ImageView btnLogout;
     LottieAnimationView lottieAnimationView;
-    Button btnModifHeure;
+    ImageView btnModifHeure;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
