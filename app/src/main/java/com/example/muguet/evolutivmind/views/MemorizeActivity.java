@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.room.Room;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.ia.AlgoGen;
+import com.example.muguet.evolutivmind.ia.Evaluation;
 import com.example.muguet.evolutivmind.ia.Regle;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Profil;
@@ -49,12 +50,15 @@ public class MemorizeActivity extends AppCompatActivity {
     private List<Regle> reglesValide;
     private List<Regle> listRegle;
     private String regleJoue;
+    private Regle regleEnCours;
+    private boolean regleJouee;
 
     private HashMap<String, Integer> listDrawable = new HashMap<>();
     private ArrayList<Integer> listFigure = new ArrayList<Integer>();
     private int correct_figure;
     private GifImageView levelUpAnim;
     private LottieAnimationView gameAnimationView;
+    private LottieAnimationView gameAnimationTimer;
     private int figure2;
     private int figure3;
     private boolean timerExpoActif = true;
@@ -111,6 +115,9 @@ public class MemorizeActivity extends AppCompatActivity {
         gameAnimationView = findViewById(R.id.animation_view_game);
         gameAnimationView.setVisibility(View.INVISIBLE);
 
+        gameAnimationTimer = findViewById(R.id.timerAnim);
+        gameAnimationTimer.setVisibility(View.INVISIBLE);
+
         listDrawable.put("Etoile", R.drawable.star);
         listDrawable.put("Triangle", R.drawable.triangle);
         listDrawable.put("Rectangle", R.drawable.rectangle);
@@ -122,13 +129,10 @@ public class MemorizeActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart(Animator animation) {
                 new_ti.cancel();
-                Log.d("tick","canceled");
-//                Log.d("debugPerso","start");
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-//                Log.d("debugPerso","end");
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -138,19 +142,42 @@ public class MemorizeActivity extends AppCompatActivity {
                         resetGame();
                     }
                 }, 500);
-
-
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-//                Log.d("debugPerso","cancel");
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
                 gameAnimationView.pauseAnimation();
-//                Log.d("debugPerso","repeat");
+            }
+        });
+
+        gameAnimationTimer.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Do something after 100ms
+                        gameAnimationTimer.setVisibility(View.INVISIBLE);
+                    }
+                }, 500);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                gameAnimationTimer.pauseAnimation();
             }
         });
 
@@ -201,14 +228,11 @@ public class MemorizeActivity extends AppCompatActivity {
                             experienceGagne += 20;
                         }
                     }
-                    Log.d("victoires: ", "" + nb_victoire);
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException ex) {
-//                        android.util.Log.d("Erreur: ", ex.toString());
-//                    }
+                    if(regleJouee == true){
+                        Evaluation.evaluerMemorize(regleEnCours, true, variante, timeleft);
+                        regleJouee = false;
+                    }
                     lottieDisplay(gameAnimationView, R.raw.check_orange);
-                    Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
                     resPartiePrecedente = true;
                 }
@@ -223,16 +247,12 @@ public class MemorizeActivity extends AppCompatActivity {
                     if (timerActif == true) {
                         timerExpo.cancel();
                     }
-//                    Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                     nb_defaite++;
-                    Log.d("defaites: ", "" + nb_defaite);
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException ex) {
-//                        android.util.Log.d("Erreur: ", ex.toString());
-//                    }
+                    if(regleJouee == true){
+                        Evaluation.evaluerMemorize(regleEnCours, true, variante, timeleft);
+                        regleJouee = false;
+                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
-                    Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
                     resPartiePrecedente = false;
                 }
@@ -247,16 +267,12 @@ public class MemorizeActivity extends AppCompatActivity {
                     if (timerActif == true) {
                         timerExpo.cancel();
                     }
-//                    Toast.makeText(ColorWordsActivity.this, "Incorrect", Toast.LENGTH_LONG).show();
                     nb_defaite++;
-                    Log.d("defaites: ", "" + nb_defaite);
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException ex) {
-//                        android.util.Log.d("Erreur: ", ex.toString());
-//                    }
+                    if(regleJouee == true){
+                        Evaluation.evaluerMemorize(regleEnCours, true, variante, timeleft);
+                        regleJouee = false;
+                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
-                    Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
                     resPartiePrecedente = false;
                 }
@@ -517,8 +533,12 @@ public class MemorizeActivity extends AppCompatActivity {
 
     private void jouerRegle(Regle regle){
 
+        regleEnCours = regle;
+        regleJouee = true;
+
         final Handler handler = new Handler();
         final TextView regleText = findViewById(R.id.regle);
+        lottieDisplay(gameAnimationTimer, R.raw.stopwatch);
 
         switch(regle.getAction()){
             case "Augmentation du temps consacré au timer":
@@ -628,9 +648,7 @@ public class MemorizeActivity extends AppCompatActivity {
                 int posRegle = rnd.nextInt(reglesValide.size());
                 jouerRegle(reglesValide.get(posRegle));
             }
-            Log.d("Passe","");
         }else{
-            Log.d("Passe2","");
             creerRegle();
         }
         if(reglesValide.size() != 0){
@@ -638,23 +656,6 @@ public class MemorizeActivity extends AppCompatActivity {
         }
         listRegle.clear();
     }
-
-    public String randomAction(){
-        String action = "";
-        Random random = new Random();
-        int res = random.nextInt(3);
-        if(res == 0){
-            action = "Augmentation du temps consacré au timer";
-        }
-        if (res == 1){
-            action = "Diminution du temps consacré au timer";
-        }
-        if (res == 2){
-            action = "Réduire le temps d'exposition de la forme";
-        }
-        return action;
-    }
-
 
     @Override
     public void onBackPressed() {

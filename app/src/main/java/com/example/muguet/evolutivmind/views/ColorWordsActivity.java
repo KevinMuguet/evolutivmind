@@ -20,6 +20,7 @@ import androidx.room.Room;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.ia.AlgoGen;
+import com.example.muguet.evolutivmind.ia.Evaluation;
 import com.example.muguet.evolutivmind.ia.Regle;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Profil;
@@ -40,11 +41,14 @@ public class ColorWordsActivity extends AppCompatActivity {
     private List<Regle> reglesValide;
     private List<Regle> listRegle;
     private String regleJoue;
+    private Regle regleEnCours;
+    private boolean regleJouee;
 
     private HashMap<String, Integer> listColor = new HashMap<>();
     private int correct_color;
     private GifImageView levelUpAnim;
     private LottieAnimationView gameAnimationView;
+    private LottieAnimationView gameAnimationTimer;
     private int color2;
     private int color3;
 
@@ -97,6 +101,8 @@ public class ColorWordsActivity extends AppCompatActivity {
 
         gameAnimationView = findViewById(R.id.animation_view_game);
         gameAnimationView.setVisibility(View.INVISIBLE);
+        gameAnimationTimer = findViewById(R.id.timerAnim);
+        gameAnimationTimer.setVisibility(View.INVISIBLE);
 
         listColor.put("Bleu", Color.BLUE);
         listColor.put("Rouge", Color.RED);
@@ -126,7 +132,6 @@ public class ColorWordsActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart(Animator animation) {
                 new_ti.cancel();
-                Log.d("tick","canceled");
             }
 
             @Override
@@ -149,6 +154,33 @@ public class ColorWordsActivity extends AppCompatActivity {
             @Override
             public void onAnimationRepeat(Animator animation) {
                 gameAnimationView.pauseAnimation();
+            }
+        });
+
+        gameAnimationTimer.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Do something after 100ms
+                        gameAnimationTimer.setVisibility(View.INVISIBLE);
+                    }
+                }, 500);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                gameAnimationTimer.pauseAnimation();
             }
         });
 
@@ -201,9 +233,11 @@ public class ColorWordsActivity extends AppCompatActivity {
                             experienceGagne += 20;
                         }
                     }
-                    Log.d("victoires: ", "" + nb_victoire);
+                    if(regleJouee == true){
+                        Evaluation.evaluerColorwords(regleEnCours, true, variante, timeleft);
+                        regleJouee = false;
+                    }
                     lottieDisplay(gameAnimationView, R.raw.check_orange);
-                    Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
                     resPartiePrecedente = true;
                 }
@@ -219,9 +253,12 @@ public class ColorWordsActivity extends AppCompatActivity {
                         timerExpo.cancel();
                     }
                     nb_defaite++;
-                    Log.d("defaites: ", "" + nb_defaite);
+
+                    if(regleJouee == true){
+                        Evaluation.evaluerColorwords(regleEnCours, false, variante, timeleft);
+                        regleJouee = false;
+                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
-                    Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
                     resPartiePrecedente = false;
                 }
@@ -237,9 +274,11 @@ public class ColorWordsActivity extends AppCompatActivity {
                         timerExpo.cancel();
                     }
                     nb_defaite++;
-                    Log.d("defaites: ", "" + nb_defaite);
+                    if(regleJouee == true){
+                        Evaluation.evaluerColorwords(regleEnCours, false, variante, timeleft);
+                        regleJouee = false;
+                    }
                     lottieDisplay(gameAnimationView, R.raw.unapproved_cross);
-                    Log.d("lottie", "lottieDisplayed");
                     verificationRegle();
                     resPartiePrecedente = false;
                 }
@@ -485,8 +524,11 @@ public class ColorWordsActivity extends AppCompatActivity {
 
     private void jouerRegle(final Regle regle){
 
+        regleEnCours = regle;
+        regleJouee = true;
         final Handler handler = new Handler();
         final TextView regleText = findViewById(R.id.regle);
+        lottieDisplay(gameAnimationTimer, R.raw.stopwatch);
 
         switch(regle.getAction()){
             case "Augmentation du temps consacré au timer":
@@ -599,9 +641,7 @@ public class ColorWordsActivity extends AppCompatActivity {
                 int posRegle = rnd.nextInt(reglesValide.size());
                 jouerRegle(reglesValide.get(posRegle));
             }
-            Log.d("Passe","");
         }else{
-            Log.d("Passe2","");
             creerRegle();
         }
         if(reglesValide.size() != 0){
@@ -609,23 +649,6 @@ public class ColorWordsActivity extends AppCompatActivity {
         }
         listRegle.clear();
     }
-
-    public String randomAction(){
-        String action = "";
-        Random random = new Random();
-        int res = random.nextInt(3);
-        if(res == 0){
-            action = "Augmentation du temps consacré au timer";
-        }
-        if (res == 1){
-            action = "Diminution du temps consacré au timer";
-        }
-        if (res == 2){
-            action = "Réduire le temps d'exposition du mot";
-        }
-        return action;
-    }
-
 
     @Override
     public void onBackPressed() {
