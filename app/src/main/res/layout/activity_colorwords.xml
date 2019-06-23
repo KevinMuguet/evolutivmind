@@ -76,7 +76,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/mot"
-            android:fontFamily="@font/annie_use_your_telescope"
             android:textSize="30dp"
             android:layout_centerVertical="true" android:layout_centerHorizontal="true"
             android:textAlignment="center"
