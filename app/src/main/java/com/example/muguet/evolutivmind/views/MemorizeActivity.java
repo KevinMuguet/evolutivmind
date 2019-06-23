@@ -42,12 +42,12 @@ public class MemorizeActivity extends AppCompatActivity {
 
     private HashMap<String, Integer> listDrawable = new HashMap<>();
     private ArrayList<Integer> listFigure = new ArrayList<Integer>();
-    private int correct_figure;
+    private Integer correct_figure;
     private GifImageView levelUpAnim;
     private LottieAnimationView gameAnimationView;
     private int figure2;
     private int figure3;
-
+    private int indice;
     private int variante;
     private boolean resPartiePrecedente;
     private long timeleft;
@@ -76,25 +76,48 @@ public class MemorizeActivity extends AppCompatActivity {
 
     private Handler myHandler;
     private int randomFigure;
-    private int cpt; // compteur qui va nous permettre de savoir
-
-
-
+    private int cpt = 0; // compteur qui va nous permettre de savoir
+    private ArrayList<Integer> listFormes = new ArrayList<Integer>();
+    private int forme1;
+    private int forme2;
+    private int forme3;
 
     private Runnable myRunnable = new Runnable() {
         @Override
         public void run() {
-
             ImageView figure = findViewById(R.id.figure);
-            // on recupère une forme au hasard
-            randomFigure = setRandomFigure();
-            // on l'affiche
-            figure.setImageResource(randomFigure);
-            listFigure.add(randomFigure);
+
+            if (cpt == 0) {
+                forme1 = setRandomFigure();
+                figure.setImageResource(forme1);
+                listFigure.add(forme1);
+            }
+            else if (cpt == 1) {
+                forme2 = setRandomFigure();
+                while(forme1 == forme2) {
+                    forme2 = setRandomFigure();
+                }
+                figure.setImageResource(forme2);
+                listFigure.add(forme2);
+            }
+            else {
+                forme3 = setRandomFigure();
+                while (forme3 == forme2 || forme3 == forme1) {
+                    forme3 = setRandomFigure();
+                }
+                figure.setImageResource(forme3);
+                listFigure.add(forme3);
+            }
             myHandler.postDelayed(this,1000);
             cpt++;
-            Log.d("runnable", String.valueOf(cpt));
-            if (cpt == 3 ) {
+            if (cpt == 3) {
+                /*Random aleat = new Random();
+                int hasard = aleat.nextInt(3-0) + 0 ;
+
+                Log.d("chiffre hasard ",Integer.toString(hasard));
+                correct_figure = listFigure.get(hasard);
+                Log.d("chiffre res ",Integer.toString(correct_figure));*/
+
                 onPause();
                 cpt =0;
             }
@@ -428,7 +451,7 @@ public class MemorizeActivity extends AppCompatActivity {
         Log.d("newgame2","je suis la ");
         final TextView timer = findViewById(R.id.timer);
         ImageView figure = findViewById(R.id.figure);
-        TextView question = findViewById(R.id.question);
+        final TextView question = findViewById(R.id.question);
         ImageView rep1 = findViewById(R.id.reponse1);
         ImageView rep2 = findViewById(R.id.reponse2);
         ImageView rep3 = findViewById(R.id.reponse3);
@@ -438,7 +461,18 @@ public class MemorizeActivity extends AppCompatActivity {
         rep3.setVisibility(View.INVISIBLE);
 
         figure.setVisibility(View.VISIBLE);
+
+
         correct_figure = setRandomFigure();
+        Log.d("Log correct figure ", String.valueOf(correct_figure));
+        //AFFICHAGE D'UNE SUCESSION DE FORMES
+        myHandler = new Handler();
+        myHandler.postDelayed(myRunnable,1000);
+
+
+
+
+
         figure2 = setRandomFigure();
         while(figure2 == correct_figure){
             figure2 = setRandomFigure();
@@ -447,25 +481,16 @@ public class MemorizeActivity extends AppCompatActivity {
         while (figure3 == figure2 || figure3 == correct_figure) {
             figure3 = setRandomFigure();
         }
+
         //Random rnd = new Random();
         //pos = rnd.nextInt(cpt);
-        Log.d("position", String.valueOf(cpt));
+
         //question.setText("Quel est la "+ pos+"eme forme affichée ?");
 
-        //AFFICHAGE D'UNE SUCESSION DE FORMES
-        myHandler = new Handler();
-        myHandler.postDelayed(myRunnable,1000);
-
-        /*for(int i = 0; i < listFigure.size(); i++) {
-            Random rnd = new Random();
-            pos = rnd.nextInt(listFigure.size());
-            Log.d("compteur", String.valueOf(cpt));
-        }*/
-        listFigure.clear();
 
         // FIN AFFICHAGE SUCESSION DE FORMES
-        figure.setImageResource(correct_figure);
-        Log.d("correct_figure",Integer.toString(correct_figure));
+        //figure.setImageResource(correct_figure);
+        //Log.d("correct_figure",Integer.toString(correct_figure));
         timerExpo = new CountDownTimer(7000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -474,6 +499,18 @@ public class MemorizeActivity extends AppCompatActivity {
 
             public void onFinish() {
 
+
+                for (int i = 0; i < listFigure.size(); i++) {
+                    if (listFigure.get(i).equals(correct_figure)) {
+                        indice = i;
+                    }
+                }
+                Log.d("Données 1er position",Integer.toString(listFigure.get(0)));
+                Log.d("Données 2eme position",Integer.toString(listFigure.get(1)));
+                Log.d("Données 3eme position",Integer.toString(listFigure.get(2)));
+                Log.d("Données correct figure ",Integer.toString(correct_figure));
+
+                question.setText("Quel est la "+ (indice +1) +"eme forme affichée ?");
                 ImageView figure = findViewById(R.id.figure);
                 ImageView rep1 = findViewById(R.id.reponse1);
                 ImageView rep2 = findViewById(R.id.reponse2);
@@ -488,6 +525,13 @@ public class MemorizeActivity extends AppCompatActivity {
                 rep2.setVisibility(View.VISIBLE);
                 rep3.setVisibility(View.VISIBLE);
 
+                /*for(int i = 0; i < listFigure.size(); i++) {
+                    Log.d("Données tab", Integer.toString(listFigure.get(i)));
+                    if (correct_figure.equals(listFigure.get(i))) {
+                        Log.d("Données ordre",Integer.toString(i));
+                    }
+                }*/
+                listFigure.clear();
                 switchPosition(rep1, rep2, rep3);
                 resetTimer();
             }
@@ -503,7 +547,7 @@ public class MemorizeActivity extends AppCompatActivity {
         isReady = true;
         Random rnd = new Random();
         int game = rnd.nextInt(2);
-        game = 2;
+
         if(game == 1){
             newGame();
         }else{
