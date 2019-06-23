@@ -660,7 +660,7 @@ public class MemorizeActivity extends AppCompatActivity {
                 break;
             case "Réduire le temps d'exposition de la forme":
                 reduireTempsExposition();
-                regleJoue = "Temps d'exposition de la forme diminué!";
+                regleJoue = "Temps d'exposition d'une forme diminué!";
                 regleText.setText(regleJoue);
                 handler.postDelayed(new Runnable() {
                     @Override
