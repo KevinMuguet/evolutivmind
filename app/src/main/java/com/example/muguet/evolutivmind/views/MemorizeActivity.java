@@ -395,6 +395,7 @@ public class MemorizeActivity extends AppCompatActivity {
         rep1.setVisibility(View.INVISIBLE);
         rep2.setVisibility(View.INVISIBLE);
         rep3.setVisibility(View.INVISIBLE);
+        question.setText("Une forme");
 
         figure.setVisibility(View.VISIBLE);
         correct_figure = setRandomFigure();
@@ -407,7 +408,6 @@ public class MemorizeActivity extends AppCompatActivity {
             figure3 = setRandomFigure();
         }
 
-        question.setText("Quel est la figure représentée?");
         figure.setImageResource(correct_figure);
 
         timerExpo = new CountDownTimer(5000, 1000) {
@@ -418,11 +418,13 @@ public class MemorizeActivity extends AppCompatActivity {
 
             public void onFinish() {
 
+                TextView question = findViewById(R.id.question);
                 ImageView figure = findViewById(R.id.figure);
                 ImageView rep1 = findViewById(R.id.reponse1);
                 ImageView rep2 = findViewById(R.id.reponse2);
                 ImageView rep3 = findViewById(R.id.reponse3);
 
+                question.setText("Quel est la figure représentée?");
                 figure.setVisibility(View.INVISIBLE);
                 rep1.setImageResource(correct_figure);
                 rep2.setImageResource(figure2);
@@ -455,6 +457,8 @@ public class MemorizeActivity extends AppCompatActivity {
         ImageView rep1 = findViewById(R.id.reponse1);
         ImageView rep2 = findViewById(R.id.reponse2);
         ImageView rep3 = findViewById(R.id.reponse3);
+
+        question.setText("Une succession de formes");
 
         rep1.setVisibility(View.INVISIBLE);
         rep2.setVisibility(View.INVISIBLE);
