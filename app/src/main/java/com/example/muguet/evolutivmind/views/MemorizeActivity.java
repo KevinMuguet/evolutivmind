@@ -4,19 +4,16 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.ia.AlgoGen;
@@ -25,11 +22,6 @@ import com.example.muguet.evolutivmind.ia.Regle;
 import com.example.muguet.evolutivmind.models.AppDatabase;
 import com.example.muguet.evolutivmind.models.Profil;
 import com.example.muguet.evolutivmind.models.Statistique;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.View;
 import com.example.muguet.evolutivmind.R;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -55,7 +47,7 @@ public class MemorizeActivity extends AppCompatActivity {
 
     private HashMap<String, Integer> listDrawable = new HashMap<>();
     private ArrayList<Integer> listFigure = new ArrayList<Integer>();
-    private int correct_figure;
+    private Integer correct_figure;
     private GifImageView levelUpAnim;
     private LottieAnimationView gameAnimationView;
     private LottieAnimationView gameAnimationTimer;
@@ -63,6 +55,7 @@ public class MemorizeActivity extends AppCompatActivity {
     private int figure3;
     private boolean timerExpoActif = true;
 
+    private int indice;
     private int variante;
     private boolean resPartiePrecedente;
     private long timeleft;
@@ -89,6 +82,63 @@ public class MemorizeActivity extends AppCompatActivity {
 
     private CountDownTimer new_ti;
     private CountDownTimer timerExpo;
+
+    private Handler myHandler;
+    private int randomFigure;
+    private int cpt = 0; // compteur qui va nous permettre de savoir
+    private ArrayList<Integer> listFormes = new ArrayList<Integer>();
+    private int forme1;
+    private int forme2;
+    private int forme3;
+
+    private Runnable myRunnable = new Runnable() {
+        @Override
+        public void run() {
+            ImageView figure = findViewById(R.id.figure);
+
+            if (cpt == 0) {
+                forme1 = setRandomFigure();
+                figure.setImageResource(forme1);
+                listFigure.add(forme1);
+            }
+            else if (cpt == 1) {
+                forme2 = setRandomFigure();
+                while(forme1 == forme2) {
+                    forme2 = setRandomFigure();
+                }
+                figure.setImageResource(forme2);
+                listFigure.add(forme2);
+            }
+            else {
+                forme3 = setRandomFigure();
+                while (forme3 == forme2 || forme3 == forme1) {
+                    forme3 = setRandomFigure();
+                }
+                figure.setImageResource(forme3);
+                listFigure.add(forme3);
+            }
+            myHandler.postDelayed(this,1000);
+            cpt++;
+            if (cpt == 3) {
+                /*Random aleat = new Random();
+                int hasard = aleat.nextInt(3-0) + 0 ;
+
+                Log.d("chiffre hasard ",Integer.toString(hasard));
+                correct_figure = listFigure.get(hasard);
+                Log.d("chiffre res ",Integer.toString(correct_figure));*/
+
+                onPause();
+                cpt =0;
+            }
+        }
+    };
+
+    public void onPause() {
+        super.onPause();
+        if(myHandler != null)
+            myHandler.removeCallbacks(myRunnable); // On arrete le callback
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,10 +182,13 @@ public class MemorizeActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart(Animator animation) {
                 new_ti.cancel();
+                Log.d("tick","canceled");
+//                Log.d("debugPerso","start");
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+//                Log.d("debugPerso","end");
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -145,10 +198,13 @@ public class MemorizeActivity extends AppCompatActivity {
                         resetGame();
                     }
                 }, 500);
+
+
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
+//                Log.d("debugPerso","cancel");
             }
 
             @Override
@@ -369,6 +425,7 @@ public class MemorizeActivity extends AppCompatActivity {
         rep1.setVisibility(View.INVISIBLE);
         rep2.setVisibility(View.INVISIBLE);
         rep3.setVisibility(View.INVISIBLE);
+        question.setText("Une forme");
 
         figure.setVisibility(View.VISIBLE);
         correct_figure = setRandomFigure();
@@ -381,7 +438,6 @@ public class MemorizeActivity extends AppCompatActivity {
             figure3 = setRandomFigure();
         }
 
-        question.setText("Quel est la figure représentée?");
         figure.setImageResource(correct_figure);
 
         timerExpo = new CountDownTimer(tempsexposition, 1000) {
@@ -396,11 +452,13 @@ public class MemorizeActivity extends AppCompatActivity {
 
                 timerExpoActif = false;
 
+                TextView question = findViewById(R.id.question);
                 ImageView figure = findViewById(R.id.figure);
                 ImageView rep1 = findViewById(R.id.reponse1);
                 ImageView rep2 = findViewById(R.id.reponse2);
                 ImageView rep3 = findViewById(R.id.reponse3);
 
+                question.setText("Quel est la figure représentée?");
                 figure.setVisibility(View.INVISIBLE);
                 rep1.setImageResource(correct_figure);
                 rep2.setImageResource(figure2);
@@ -417,26 +475,42 @@ public class MemorizeActivity extends AppCompatActivity {
         timerExpo.start();
     }
 
+
+
+
     /**
      * Fonction démarrant la seconde variante du jeu (couleur représentée par mot)
      */
     private void newGame2(){
 
         variante = 2;
-
+        Log.d("newgame2","je suis la ");
         final TextView timer = findViewById(R.id.timer);
-        final ImageView figure = findViewById(R.id.figure);
+        ImageView figure = findViewById(R.id.figure);
         final TextView question = findViewById(R.id.question);
-        final ImageView rep1 = findViewById(R.id.reponse1);
-        final ImageView rep2 = findViewById(R.id.reponse2);
-        final ImageView rep3 = findViewById(R.id.reponse3);
+        ImageView rep1 = findViewById(R.id.reponse1);
+        ImageView rep2 = findViewById(R.id.reponse2);
+        ImageView rep3 = findViewById(R.id.reponse3);
+
+        question.setText("Une succession de formes");
 
         rep1.setVisibility(View.INVISIBLE);
         rep2.setVisibility(View.INVISIBLE);
         rep3.setVisibility(View.INVISIBLE);
 
         figure.setVisibility(View.VISIBLE);
+
+
         correct_figure = setRandomFigure();
+        Log.d("Log correct figure ", String.valueOf(correct_figure));
+        //AFFICHAGE D'UNE SUCESSION DE FORMES
+        myHandler = new Handler();
+        myHandler.postDelayed(myRunnable,1000);
+
+
+
+
+
         figure2 = setRandomFigure();
         while(figure2 == correct_figure){
             figure2 = setRandomFigure();
@@ -446,44 +520,61 @@ public class MemorizeActivity extends AppCompatActivity {
             figure3 = setRandomFigure();
         }
 
+        //Random rnd = new Random();
+        //pos = rnd.nextInt(cpt);
 
-        for(int i = 0; i < 2; i++){
-            listFigure.add(setRandomFigure());
-        }
-        listFigure.add(correct_figure);
-        Log.d("rfdsdfs",""+listFigure.get(0)+listFigure.get(1)+listFigure.get(2));
+        //question.setText("Quel est la "+ pos+"eme forme affichée ?");
 
-        for(int i = 0; i < listFigure.size(); i++) {
-            Random rnd = new Random();
-            pos = rnd.nextInt(listFigure.size());
-            figure.setImageResource(listFigure.get(pos));
-            figure.startAnimation(rotation);
-        }
 
-        /*
-        timerExpo = new CountDownTimer(5000, 1000) {
+        // FIN AFFICHAGE SUCESSION DE FORMES
+        //figure.setImageResource(correct_figure);
+        //Log.d("correct_figure",Integer.toString(correct_figure));
+        timerExpo = new CountDownTimer(7000, 1000) {
+
             public void onTick(long millisUntilFinished) {
                 timer.setText("Memorisez! : " + millisUntilFinished / 1000);
             }
+
             public void onFinish() {
-                if(listFigure.size() == 0){
-                    question.setText("Quel était la figure à la "+correct_pos+" position?");
-                    figure.setVisibility(View.INVISIBLE);
-                    rep1.setImageResource(correct_figure);
-                    rep2.setImageResource(figure2);
-                    rep3.setImageResource(figure3);
 
-                    rep1.setVisibility(View.VISIBLE);
-                    rep2.setVisibility(View.VISIBLE);
-                    rep3.setVisibility(View.VISIBLE);
 
-                    switchPosition(rep1, rep2, rep3);
-                    resetTimer();
+                for (int i = 0; i < listFigure.size(); i++) {
+                    if (listFigure.get(i).equals(correct_figure)) {
+                        indice = i;
+                    }
                 }
+                Log.d("Données 1er position",Integer.toString(listFigure.get(0)));
+                Log.d("Données 2eme position",Integer.toString(listFigure.get(1)));
+                Log.d("Données 3eme position",Integer.toString(listFigure.get(2)));
+                Log.d("Données correct figure ",Integer.toString(correct_figure));
+
+                question.setText("Quel est la "+ (indice +1) +"eme forme affichée ?");
+                ImageView figure = findViewById(R.id.figure);
+                ImageView rep1 = findViewById(R.id.reponse1);
+                ImageView rep2 = findViewById(R.id.reponse2);
+                ImageView rep3 = findViewById(R.id.reponse3);
+
+                figure.setVisibility(View.INVISIBLE);
+                rep1.setImageResource(correct_figure);
+                rep2.setImageResource(figure2);
+                rep3.setImageResource(figure3);
+
+                rep1.setVisibility(View.VISIBLE);
+                rep2.setVisibility(View.VISIBLE);
+                rep3.setVisibility(View.VISIBLE);
+
+                /*for(int i = 0; i < listFigure.size(); i++) {
+                    Log.d("Données tab", Integer.toString(listFigure.get(i)));
+                    if (correct_figure.equals(listFigure.get(i))) {
+                        Log.d("Données ordre",Integer.toString(i));
+                    }
+                }*/
+                listFigure.clear();
+                switchPosition(rep1, rep2, rep3);
+                resetTimer();
             }
         };
         timerExpo.start();
-        */
     }
 
     /**
@@ -494,10 +585,11 @@ public class MemorizeActivity extends AppCompatActivity {
         isReady = true;
         Random rnd = new Random();
         int game = rnd.nextInt(2);
+
         if(game == 1){
             newGame();
         }else{
-            newGame();
+            newGame2();
         }
     }
 
