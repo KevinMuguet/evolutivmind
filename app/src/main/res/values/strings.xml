@@ -3,4 +3,6 @@
     <string name="title_activity_main">EvolutivMind</string>
     <string name="title_activity_games">Games</string>
     <string name="title_activity_memorize">MemorizeActivity</string>
+    <string name="text_notification">Venez faire votre exercice quotidien !</string>
+    <string name="title_notification">Exercice du jour</string>
 </resources>

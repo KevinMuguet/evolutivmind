@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.utils.AlarmReceiver;
+import com.example.muguet.evolutivmind.utils.NotificationScheduler;
 
 import java.util.Calendar;
 
@@ -53,8 +55,9 @@ public class OptionsActivity extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(OptionsActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        valHeureNotif.setText( selectedHour + ":" + selectedMinute);
-                        sharedpreferences.edit().putString("hourNotificationsPush",selectedHour + ":" + selectedMinute).apply();
+                        valHeureNotif.setText(selectedHour + ":" + selectedMinute);
+                        sharedpreferences.edit().putString("hourNotificationsPush", selectedHour + ":" + selectedMinute).apply();
+                        NotificationScheduler.setReminder(getBaseContext(),OptionsActivity.class, sharedpreferences);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -66,11 +69,11 @@ public class OptionsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setVisibiForHour();
-                sharedpreferences.edit().putBoolean("notificationsPush",notifSwitch.isChecked()).apply();
+                sharedpreferences.edit().putBoolean("notificationsPush", notifSwitch.isChecked()).apply();
                 String hourNotif = sharedpreferences.getString("hourNotificationsPush", "");
                 // afficher le timePicker si l'heure n'a pas été choisi
-                if(notifSwitch.isChecked()) {
-                    if(hourNotif.equals("")) {
+                if (notifSwitch.isChecked()) {
+                    if (hourNotif.equals("")) {
                         // heure non choisi
                         Calendar mcurrentTime = Calendar.getInstance();
                         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -79,28 +82,15 @@ public class OptionsActivity extends AppCompatActivity {
                         mTimePicker = new TimePickerDialog(OptionsActivity.this, new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                valHeureNotif.setText( selectedHour + ":" + selectedMinute);
-                                sharedpreferences.edit().putString("hourNotificationsPush",selectedHour + ":" + selectedMinute).apply();
+                                valHeureNotif.setText(selectedHour + ":" + selectedMinute);
+                                sharedpreferences.edit().putString("hourNotificationsPush", selectedHour + ":" + selectedMinute).apply();
                             }
                         }, hour, minute, true);//Yes 24 hour time
                         mTimePicker.setTitle("Select Time");
                         mTimePicker.show();
                     } else {
                         // heure choisi, set the notification
-//                        Intent alarmIntent = new Intent(getBaseContext(), AlarmReceiver.class);
-//                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, alarmIntent, 0);
-//
-//                        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//
-//                        Calendar calendar = Calendar.getInstance();
-//                        calendar.setTimeInMillis(System.currentTimeMillis());
-//                        String[] splitHourNotif = hourNotif.split(":");
-//                        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(splitHourNotif[0]));
-//                        calendar.set(Calendar.MINUTE, Integer.valueOf(splitHourNotif[1]));
-//                        calendar.set(Calendar.SECOND, 0);
-//
-//                        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                                AlarmManager.INTERVAL_DAY, pendingIntent);
+                        NotificationScheduler.setReminder(getBaseContext(),AlarmReceiver.class, sharedpreferences);
                     }
                     initHourOfNotif();
                 }
@@ -156,7 +146,7 @@ public class OptionsActivity extends AppCompatActivity {
     }
 
     public void setVisibiForHour() {
-        if(notifSwitch.isChecked()) {
+        if (notifSwitch.isChecked()) {
             heureNotif.setVisibility(View.VISIBLE);
             valHeureNotif.setVisibility(View.VISIBLE);
             btnModifHeure.setVisibility(View.VISIBLE);
