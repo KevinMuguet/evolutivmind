@@ -96,7 +96,7 @@ public class NotificationScheduler
                 .setContentText(content)
                 .setAutoCancel(true)
                 .setSound(alarmSound)
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(pendingIntent).build();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
