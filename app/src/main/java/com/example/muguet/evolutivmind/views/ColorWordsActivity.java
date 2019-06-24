@@ -199,13 +199,16 @@ public class ColorWordsActivity extends AppCompatActivity {
         _loLottieAnimationView.playAnimation();
     }
 
+    /**
+     * Lance une nouvelle partie
+     */
     private void resetGame() {
         changeGame();
         resetTimer();
     }
 
     /**
-     * Fonction vérifiant le choix du joueur
+     * Fonction vérifiant le choix du joueur et réalisant les actions associées
      * @param rect
      * @param rect2
      * @param rect3
@@ -224,6 +227,7 @@ public class ColorWordsActivity extends AppCompatActivity {
                         timerExpo.cancel();
                     }
                     nb_victoire++;
+                    //Augmentation du niveau utilisateur
                     if (userExp >= 100) {
                         levelUpAnim.setVisibility(View.VISIBLE);
                         levelUpAnim.setBackgroundResource(R.drawable.levelup);
@@ -236,6 +240,7 @@ public class ColorWordsActivity extends AppCompatActivity {
                             userExp += 20;
                         }
                     }
+                    //Evaluation de la regle jouée s'il y en a eu une
                     if(regleJouee == true){
                         Evaluation.evaluerColorwords(regleEnCours, true, variante, timeleft);
                         regleJouee = false;
@@ -256,7 +261,7 @@ public class ColorWordsActivity extends AppCompatActivity {
                         timerExpo.cancel();
                     }
                     nb_defaite++;
-
+                    //Evaluation de la regle jouée s'il y en a eu une
                     if(regleJouee == true){
                         Evaluation.evaluerColorwords(regleEnCours, false, variante, timeleft);
                         regleJouee = false;
@@ -277,6 +282,7 @@ public class ColorWordsActivity extends AppCompatActivity {
                         timerExpo.cancel();
                     }
                     nb_defaite++;
+                    //Evaluation de la regle jouée s'il y en a eu une
                     if(regleJouee == true){
                         Evaluation.evaluerColorwords(regleEnCours, false, variante, timeleft);
                         regleJouee = false;
@@ -291,7 +297,7 @@ public class ColorWordsActivity extends AppCompatActivity {
 
     /**
      * Fonction retournant une couleur aléatoire
-     * @return
+     * @return Couleur aléatoire
      */
     private int setRandomColor(){
         Random rnd = new Random();
@@ -300,7 +306,7 @@ public class ColorWordsActivity extends AppCompatActivity {
 
     /**
      * Fonction retournant un string de couleur aléatoire
-     * @return
+     * @return String de couleur aléatoire
      */
     private String setRandomColorString(){
         Random random = new Random();
@@ -368,7 +374,7 @@ public class ColorWordsActivity extends AppCompatActivity {
     }
 
     /**
-     * Fonction démarrant la première variante du jeu (couleur mot)
+     * Fonction démarrant la première variante du jeu (couleur d'un mot)
      */
     private void newGame(){
 
@@ -407,7 +413,7 @@ public class ColorWordsActivity extends AppCompatActivity {
     }
 
     /**
-     * Fonction démarrant la seconde variante du jeu (couleur représentée par mot)
+     * Fonction démarrant la seconde variante du jeu (couleur représentée par un mot)
      */
     private void newGame2(){
 
@@ -461,6 +467,10 @@ public class ColorWordsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Modifie le temps maximum du timer
+     * @param increase
+     */
     private void changeTimer(boolean increase){
         //Création d'un timer
         final TextView timer = findViewById(R.id.timer);
@@ -487,6 +497,9 @@ public class ColorWordsActivity extends AppCompatActivity {
         new_ti.start();
     }
 
+    /**
+     * Réinitialise le timer
+     */
     private void resetTimer(){
         //Création d'un timer
         final TextView timer = findViewById(R.id.timer);
@@ -507,6 +520,9 @@ public class ColorWordsActivity extends AppCompatActivity {
         new_ti.start();
     }
 
+    /**
+     * Réduit le temps d'exposition du mot
+     */
     private void reduireTempsExposition(){
 
         tempsexposition = 5000;
@@ -525,6 +541,10 @@ public class ColorWordsActivity extends AppCompatActivity {
         timerExpo.start();
     }
 
+    /**
+     * Joue une règle
+     * @param regle
+     */
     private void jouerRegle(final Regle regle){
 
         regleEnCours = regle;
@@ -573,6 +593,9 @@ public class ColorWordsActivity extends AppCompatActivity {
         Log.d("Regle joue: ",""+regle.getAction());
     }
 
+    /**
+     * Créer une règle à partir de la situation et applique l'algo gen
+     */
     private void creerRegle(){
         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
@@ -608,6 +631,9 @@ public class ColorWordsActivity extends AppCompatActivity {
         db_loc.regleDao().insert(regle3);
     }
 
+    /**
+     * Vérifie l'existence d'une règle dans la bdd et appelle la fonction associée
+     */
     private void verificationRegle(){
         maxPoids = 0;
         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),

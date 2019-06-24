@@ -251,13 +251,16 @@ public class MemorizeActivity extends AppCompatActivity {
         _loLottieAnimationView.playAnimation();
     }
 
+    /**
+     * Lance une nouvelle partie
+     */
     private void resetGame() {
         new_ti.cancel();
         changeGame();
     }
 
     /**
-     * Fonction vérifiant le choix du joueur
+     * Fonction vérifiant le choix du joueur et réalisant les actions associées
      * @param rep1
      * @param rep2
      * @param rep3
@@ -341,7 +344,7 @@ public class MemorizeActivity extends AppCompatActivity {
 
     /**
      * Fonction retournant une figure aléatoire
-     * @return
+     * @return Une figure aléatoire
      */
     private int setRandomFigure(){
         Random rnd = new Random();
@@ -409,7 +412,7 @@ public class MemorizeActivity extends AppCompatActivity {
     }
 
     /**
-     * Fonction démarrant la première variante du jeu (couleur mot)
+     * Fonction démarrant la première variante du jeu (une seule forme)
      */
     private void newGame(){
 
@@ -479,7 +482,7 @@ public class MemorizeActivity extends AppCompatActivity {
 
 
     /**
-     * Fonction démarrant la seconde variante du jeu (couleur représentée par mot)
+     * Fonction démarrant la seconde variante du jeu (succession de formes)
      */
     private void newGame2(){
 
@@ -593,6 +596,10 @@ public class MemorizeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Modifie le temps maximum du timer
+     * @param increase
+     */
     private void changeTimer(boolean increase){
         new_ti.cancel();
         if(increase == true) {
@@ -602,6 +609,9 @@ public class MemorizeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Réinitialise le timer
+     */
     private void resetTimer(){
         //Création d'un timer
         final TextView timer = findViewById(R.id.timer);
@@ -621,11 +631,18 @@ public class MemorizeActivity extends AppCompatActivity {
         new_ti.start();
     }
 
+    /**
+     * Réduit le temps d'exposition du mot
+     */
     private void reduireTempsExposition(){
 
         tempsexposition = tempsexposition - 1000;
     }
 
+    /**
+     * Joue une règle
+     * @param regle
+     */
     private void jouerRegle(Regle regle){
 
         regleEnCours = regle;
@@ -675,6 +692,9 @@ public class MemorizeActivity extends AppCompatActivity {
         Log.d("Regle joue: ",""+regle.getAction());
     }
 
+    /**
+     * Créer une règle à partir de la situation et applique l'algo gen
+     */
     private void creerRegle(){
         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
@@ -707,6 +727,9 @@ public class MemorizeActivity extends AppCompatActivity {
         db_loc.regleDao().insert(regle3);
     }
 
+    /**
+     * Vérifie l'existence d'une règle dans la bdd et appelle la fonction associée
+     */
     private void verificationRegle(){
         maxPoids = 0;
         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),

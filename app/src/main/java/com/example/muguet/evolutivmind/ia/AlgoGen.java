@@ -4,6 +4,11 @@ import java.util.Random;
 
 public class AlgoGen {
 
+    /**
+     * Change aléatoirement l'action d'une règle
+     * @param action
+     * @return Une action
+     */
     public static String mutationAction(String action){
         String newAction = "";
         Random random = new Random();
@@ -23,6 +28,11 @@ public class AlgoGen {
         return newAction;
     }
 
+    /**
+     * Réalise une mutation sur un attribut aléatoire d'une règle
+     * @param regle
+     * @return Une règle
+     */
     public static Regle mutationRegle(Regle regle){
         Random random = new Random();
         int res = random.nextInt(3);

@@ -4,6 +4,9 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
+/**
+ * Classe définissant les profils utilisateurs
+ */
 public class Profil {
 
     @PrimaryKey(autoGenerate = true)

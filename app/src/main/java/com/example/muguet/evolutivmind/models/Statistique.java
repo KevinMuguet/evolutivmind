@@ -8,7 +8,9 @@ import androidx.room.PrimaryKey;
 @Entity(foreignKeys = @ForeignKey(entity = Profil.class,
         parentColumns = "id",
         childColumns = "userId"))
-
+/**
+ * Classe définissant les statistiques des joueurs
+ */
 public class Statistique {
 
     @PrimaryKey(autoGenerate = true)

@@ -6,6 +6,9 @@ import androidx.room.PrimaryKey;
 import java.util.Random;
 
 @Entity
+/**
+ * Classe définissant l'objet Regle
+ */
 public class Regle {
     @PrimaryKey(autoGenerate = true)
     public int id;

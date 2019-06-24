@@ -2,6 +2,13 @@ package com.example.muguet.evolutivmind.ia;
 
 public class Evaluation{
 
+    /**
+     * Évaluation d'une règle de Colorwords et mise à jour du poids
+     * @param regle
+     * @param victoire
+     * @param variante
+     * @param tempsRestant
+     */
     public static void evaluerColorwords(Regle regle, boolean victoire, int variante, long tempsRestant)
     {
         if(victoire == true){
@@ -51,6 +58,13 @@ public class Evaluation{
         }
     }
 
+    /**
+     * Évaluation d'une règle de Memorize et mise à jour du poids
+     * @param regle
+     * @param victoire
+     * @param variante
+     * @param tempsRestant
+     */
     public static void evaluerMemorize(Regle regle, boolean victoire, int variante, long tempsRestant)
     {
         if(victoire == true){
