@@ -44,6 +44,7 @@ public class MemorizeActivity extends AppCompatActivity {
     private String regleJoue;
     private Regle regleEnCours;
     private boolean regleJouee;
+    private boolean succession;
 
     private HashMap<String, Integer> listDrawable = new HashMap<>();
     private ArrayList<Integer> listFigure = new ArrayList<Integer>();
@@ -94,6 +95,7 @@ public class MemorizeActivity extends AppCompatActivity {
     private Runnable myRunnable = new Runnable() {
         @Override
         public void run() {
+            succession = true;
             ImageView figure = findViewById(R.id.figure);
 
             if (cpt == 0) {
@@ -241,7 +243,7 @@ public class MemorizeActivity extends AppCompatActivity {
         });
 
         isReady = true;
-        newGame();
+        changeGame();
         verif(rep1, rep2, rep3);
     }
 
@@ -514,7 +516,6 @@ public class MemorizeActivity extends AppCompatActivity {
 
 
 
-
         figure2 = setRandomFigure();
         while(figure2 == correct_figure){
             figure2 = setRandomFigure();
@@ -533,10 +534,11 @@ public class MemorizeActivity extends AppCompatActivity {
         // FIN AFFICHAGE SUCESSION DE FORMES
         //figure.setImageResource(correct_figure);
         //Log.d("correct_figure",Integer.toString(correct_figure));
-        timerExpo = new CountDownTimer(7000, 1000) {
+        timerExpo = new CountDownTimer(tempsexposition+3, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("Memorisez! : " + millisUntilFinished / 1000);
+                succession = false;
             }
 
             public void onFinish() {
@@ -547,10 +549,6 @@ public class MemorizeActivity extends AppCompatActivity {
                         indice = i;
                     }
                 }
-                Log.d("Données 1er position",Integer.toString(listFigure.get(0)));
-                Log.d("Données 2eme position",Integer.toString(listFigure.get(1)));
-                Log.d("Données 3eme position",Integer.toString(listFigure.get(2)));
-                Log.d("Données correct figure ",Integer.toString(correct_figure));
 
                 question.setText("Quel est la "+ (indice +1) +"eme forme affichée ?");
                 ImageView figure = findViewById(R.id.figure);
@@ -790,6 +788,10 @@ public class MemorizeActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
+                        if(variante == 2 && succession == true){
+                            timerExpo.cancel();
+                        }
                         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                                 AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
 
