@@ -501,6 +501,7 @@ public class MemorizeActivity extends AppCompatActivity {
         rep2.setVisibility(View.INVISIBLE);
         rep3.setVisibility(View.INVISIBLE);
 
+        figure.setImageResource(android.R.color.transparent);
         figure.setVisibility(View.VISIBLE);
 
 
