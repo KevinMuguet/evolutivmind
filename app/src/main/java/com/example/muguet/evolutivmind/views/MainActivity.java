@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,10 +19,13 @@ import androidx.room.Room;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.muguet.evolutivmind.R;
 import com.example.muguet.evolutivmind.models.AppDatabase;
+import com.example.muguet.evolutivmind.models.Profil;
 import com.example.muguet.evolutivmind.models.Statistique;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.*;
 
 import java.util.List;
 
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        boolean recup = false;
         ImageView fb = findViewById(R.id.fb);
         ImageView tw = findViewById(R.id.twitter);
         Animation shake = AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake);
@@ -40,14 +45,17 @@ public class MainActivity extends AppCompatActivity {
         tw.startAnimation(shake);
 
         if(isNetworkAvailable()){
-            AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
+            final AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                     AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
             SharedPreferences sharedpreferences = getSharedPreferences("MyPref",
                     Context.MODE_PRIVATE);
-            String loginFromSP = sharedpreferences.getString("login", null);
-            int userId = db_loc.profilDao().getProfil(loginFromSP).getId();
+            final String loginFromSP = sharedpreferences.getString("login", null);
+            final String age = sharedpreferences.getString("age", null);
+            final int[] userId = {db_loc.profilDao().getProfil(loginFromSP).getId()};
             FirebaseApp.initializeApp(this);
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            //Sauvegarde sur firestore
             db.collection("profil").document(String.valueOf(db_loc.profilDao().getProfil(loginFromSP).id))
                     .set(db_loc.profilDao().getProfil(loginFromSP)).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -55,12 +63,58 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            List<Statistique> statsJoueur = db_loc.statistiqueDao().findStatistiqueForUser(userId);
+            List<Statistique> statsJoueur = db_loc.statistiqueDao().findStatistiqueForUser(userId[0]);
             for(int i = 0; i < statsJoueur.size(); i++){
                 db.collection("statistique").document(String.valueOf(statsJoueur.get(i).id))
                         .set(statsJoueur.get(i)).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                    }
+                });
+            }
+
+            //Récupération compte à partir de firestore
+            if(db_loc.profilDao().getProfil(loginFromSP) == null && recup == true) {
+                CollectionReference profil = db.collection("profil");
+                Query query = profil.whereEqualTo("nom", loginFromSP).whereEqualTo("age", Integer.parseInt(age));
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Profil profil = new Profil();
+                            profil.setNom(loginFromSP);
+                            profil.setAge(Integer.parseInt(age));
+                            profil.setNiveau(Integer.parseInt(document.get("niveau").toString()));
+                            profil.setExperience(Integer.parseInt(document.get("experience").toString()));
+                            db_loc.profilDao().insert(profil);
+
+                            final String id = document.get("id").toString();
+                            CollectionReference stats = db.collection("statistique");
+                            Query query = stats.whereEqualTo("userId", Integer.parseInt(id));
+                            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        if (document.get("jeu").toString() == "ColorWords") {
+                                            Statistique cw = new Statistique();
+                                            cw.setJeu("ColorWords");
+                                            cw.setVictoires(Integer.parseInt(document.get("victoires").toString()));
+                                            cw.setDefaites(Integer.parseInt(document.get("defaites").toString()));
+                                            cw.setUserId(db_loc.profilDao().getProfil(loginFromSP).id);
+                                            db_loc.statistiqueDao().insert(cw);
+                                        }
+                                        if (document.get("jeu").toString() == "Memorize") {
+                                            Statistique m = new Statistique();
+                                            m.setJeu("Memorize");
+                                            m.setVictoires(Integer.parseInt(document.get("victoires").toString()));
+                                            m.setDefaites(Integer.parseInt(document.get("defaites").toString()));
+                                            m.setUserId(db_loc.profilDao().getProfil(loginFromSP).id);
+                                            db_loc.statistiqueDao().insert(m);
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     }
                 });
             }

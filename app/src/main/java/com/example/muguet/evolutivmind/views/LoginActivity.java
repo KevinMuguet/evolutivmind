@@ -89,8 +89,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        String email = _username.getText().toString();
-        String password = _age.getText().toString();
+        String username = _username.getText().toString();
+        String age = _age.getText().toString();
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         final SharedPreferences.Editor editor = pref.edit();
 
@@ -98,16 +98,16 @@ public class LoginActivity extends AppCompatActivity {
         AppDatabase db_loc = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "evolutivmind").allowMainThreadQueries().build();
 
-        editor.putString("login", email);
-        editor.putString("age", password);
+        editor.putString("login", username);
+        editor.putString("age", age);
 
         editor.apply();
 
         Profil nouveauProfil = new Profil();
         nouveauProfil.setExperience(0);
         nouveauProfil.setNiveau(1);
-        nouveauProfil.setNom(email);
-        nouveauProfil.setAge(Integer.parseInt(password));
+        nouveauProfil.setNom(username);
+        nouveauProfil.setAge(Integer.parseInt(age));
         db_loc.profilDao().insert(nouveauProfil);
 
         Intent intent = new Intent(getBaseContext(), MainActivity.class);

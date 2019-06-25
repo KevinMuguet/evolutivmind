@@ -14,7 +14,11 @@ public class Evaluation{
         if(victoire == true){
             if(variante == 2){
                 if(regle.getAction() == "Augmentation du temps consacré au timer"){
-                    regle.setPoids(regle.getPoids()-2);
+                    if(tempsRestant < 5){
+                        regle.setPoids(regle.getPoids()-1);
+                    }else{
+                        regle.setPoids(regle.getPoids()-2);
+                    }
                 }
                 if(regle.getAction() == "Diminution du temps consacré au timer"){
                     regle.setPoids(regle.getPoids()+1);
@@ -36,7 +40,11 @@ public class Evaluation{
         }else{
             if(variante == 2){
                 if(regle.getAction() == "Augmentation du temps consacré au timer"){
-                    regle.setPoids(regle.getPoids()+2);
+                    if(tempsRestant < 5){
+                        regle.setPoids(regle.getPoids()+2);
+                    }else{
+                        regle.setPoids(regle.getPoids()+1);
+                    }
                 }
                 if(regle.getAction() == "Diminution du temps consacré au timer"){
                     regle.setPoids(regle.getPoids()-1);
@@ -70,7 +78,11 @@ public class Evaluation{
         if(victoire == true){
             if(variante == 2){
                 if(regle.getAction() == "Augmentation du temps consacré au timer"){
-                    regle.setPoids(regle.getPoids()-2);
+                    if(tempsRestant < 5){
+                        regle.setPoids(regle.getPoids()-1);
+                    }else{
+                        regle.setPoids(regle.getPoids()-2);
+                    }
                 }
                 if(regle.getAction() == "Diminution du temps consacré au timer"){
                     regle.setPoids(regle.getPoids()+1);
@@ -92,7 +104,11 @@ public class Evaluation{
         }else{
             if(variante == 2){
                 if(regle.getAction() == "Augmentation du temps consacré au timer"){
-                    regle.setPoids(regle.getPoids()+2);
+                    if(tempsRestant < 5){
+                        regle.setPoids(regle.getPoids()+2);
+                    }else{
+                        regle.setPoids(regle.getPoids()+1);
+                    }
                 }
                 if(regle.getAction() == "Diminution du temps consacré au timer"){
                     regle.setPoids(regle.getPoids()-1);
